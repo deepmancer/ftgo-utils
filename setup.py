@@ -14,7 +14,7 @@ setup(
         "asyncpg",
         "bcrypt",
         "colorama",
-        "email-validator",
+        "email-validator==2.1.0",
         "greenlet",
         "httpx",
         "loguru",

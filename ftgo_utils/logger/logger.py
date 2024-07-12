@@ -1,6 +1,7 @@
 import logging
 import sys
 from pprint import pformat
+from typing import Optional
 
 from loguru import logger
 from loguru._defaults import LOGURU_FORMAT
@@ -58,7 +59,7 @@ def init_logging():
         handlers=[{"sink": sys.stdout, "level": logging.DEBUG, "format": format_record}]
     )
 
-def get_logger(layer_name: str = None):
+def get_logger(layer_name: Optional[str] = None):
     from loguru import logger
     if layer_name is None:
         return logger

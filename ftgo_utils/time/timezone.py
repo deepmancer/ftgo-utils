@@ -6,3 +6,5 @@ def utcnow():
 
 def utcnow_timestamp():
     return int(datetime.now(pytz.UTC).timestamp())
+
+timezone = pytz.UTC

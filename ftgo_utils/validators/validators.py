@@ -1,3 +1,4 @@
+from enum import Enum
 import string
 import validators
 from .exceptions import (
@@ -63,3 +64,18 @@ def validate_password(password: str):
         return password
     except ValueError as e:
         raise ValueError(str(PasswordValidationError(password, message=str(e.args[0]))))
+
+def validate_enum_value(value: str, enum_class: Enum, enum_name: str):
+    try:
+        if not value:
+            raise ValueError(f"{enum_name} cannot be empty")
+        
+        if not isinstance(value, str):
+            raise ValueError(f"{enum_name} should be a string")
+        
+        if value not in [enum_item.value for enum_item in enum_class]:
+            raise ValueError(f"{value} is not a valid {enum_name}")
+        
+        return value
+    except ValueError as e:
+        raise ValueError(str(e.args[0]))

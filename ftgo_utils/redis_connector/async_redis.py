@@ -36,7 +36,7 @@ class AsyncRedis():
                     self.session = redis.Redis.from_url(self.url, decode_responses=True)
                     await self.session.ping()
                 except Exception as e:
-                    raise RedisConnectionError(utl=self.url, message=str(e.args[0]))
+                    raise RedisConnectionError(url=self.url, message=str(e.args[0]))
 
     async def disconnect(self) -> None:
         async with self._locks[self.url]:

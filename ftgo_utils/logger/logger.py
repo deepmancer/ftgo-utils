@@ -34,7 +34,7 @@ def format_record(record: dict) -> str:
     format_string += "{exception}\n"
     return format_string
 
-def init_logging():
+def init_logging(level=logging.DEBUG):
     import logging
     import sys
     from pprint import pformat
@@ -56,7 +56,7 @@ def init_logging():
 
     # set logs output, level and format
     logger.configure(
-        handlers=[{"sink": sys.stdout, "level": logging.DEBUG, "format": format_record}]
+        handlers=[{"sink": sys.stdout, "level": level, "format": format_record}]
     )
 
 def get_logger(layer_name: Optional[str] = None):

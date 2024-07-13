@@ -1,10 +1,10 @@
 import pytz
 from datetime import datetime
 
-def utcnow():
+def now():
     return datetime.now(pytz.UTC)
 
-def utcnow_timestamp():
+def now_timestamp():
     return int(datetime.now(pytz.UTC).timestamp())
 
 timezone = pytz.UTC

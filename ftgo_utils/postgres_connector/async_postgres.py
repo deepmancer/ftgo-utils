@@ -1,5 +1,6 @@
 import contextlib
-from typing import Optional, Dict, Type
+import threading
+from typing import Dict
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -10,29 +11,32 @@ from sqlalchemy.ext.asyncio import (
 from .exceptions import PostgresConnectionError, PostgresSessionCreationError
 
 class AsyncPostgres:
-    _instances = {}
-    _locks = {}
+    _instances: Dict[str, 'AsyncPostgres'] = {}
+    _locks: Dict[str, threading.Lock] = {}
 
-    def __new__(cls, url: str):
+    def __new__(cls, url: str, *args, **kwargs):
         if url not in cls._locks:
-            cls._locks[url] = asyncio.Lock()
-        return cls._instances.setdefault(url, super(AsyncPostgres, cls).__new__(cls))
-
-    def __init__(self, url: str):
-        if not hasattr(self, 'initialized'):
-            self.url = url
-            self.session = None
-            self.initialized = True
+            cls._locks[url] = threading.Lock()
+        with cls._locks[url]:
+            if url not in cls._instances:
+                instance = super().__new__(cls)
+                cls._instances[url] = instance
+            return cls._instances[url]
 
     def __init__(self, url: str, echo: bool = False, expire_on_commit: bool = False):
-        self.url = url
-        self.echo = echo
-        self.expire_on_commit = expire_on_commit
-        
-        self._async_engine: AsyncEngine = self._create_async_engine()
-        self._async_session_maker = self._create_async_session_maker()
+        if not hasattr(self, 'initialized'):
+            self.url = url
+            self.echo = echo
+            self.expire_on_commit = expire_on_commit
+            self._async_engine: Optional[AsyncEngine] = None
+            self._async_session_maker: Optional[async_sessionmaker] = None
+            self.initialized = True
 
-    
+    async def init(self):
+        if self._async_engine is None:
+            self._async_engine = self._create_async_engine()
+            self._async_session_maker = self._create_async_session_maker()
+
     def _create_async_engine(self) -> AsyncEngine:
         return create_async_engine(
             url=self.url,
@@ -48,21 +52,24 @@ class AsyncPostgres:
 
     @contextlib.asynccontextmanager
     async def get_or_create_session(self):
+        await self.init()
         session = self._async_session_maker()
         try:
             yield session
         except Exception as e:
             await session.rollback()
-            raise PostgresSessionCreationError(url=self.url, message=str(e.args[0]))
+            raise PostgresSessionCreationError(url=self.url, message=str(e))
         finally:
             await session.close()
 
     async def connect(self) -> None:
+        await self.init()
         try:
             async with self._async_engine.begin() as connection:
                 await connection.run_sync(lambda conn: None)
         except Exception as e:
-            raise PostgresConnectionError(url=self.url, message=str(e.args[0]))
+            raise PostgresConnectionError(url=self.url, message=str(e))
 
     async def disconnect(self) -> None:
-        await self._async_engine.dispose()
+        if self._async_engine:
+            await self._async_engine.dispose()

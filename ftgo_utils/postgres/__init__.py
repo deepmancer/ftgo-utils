@@ -1,2 +1,0 @@
-from .postgres import AsyncPostgres
-

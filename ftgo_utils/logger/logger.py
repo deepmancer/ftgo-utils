@@ -23,15 +23,29 @@ class InterceptHandler(logging.Handler):
         )
 
 def format_record(record: dict) -> str:
-    format_string = LOGURU_FORMAT
-    if record["extra"].get("payload") is not None:
-        record["extra"]["payload"] = pformat(
-            record["extra"]["payload"], indent=4, compact=True, width=88
-        )
-        format_string += "\n<level>{extra[payload]}</level>"
+    env = record["extra"].get("env")
+    layer = record["extra"].get("layer")
 
-    format_string += "{exception}\n"
-    return format_string
+    base_format = (
+        "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> "
+        "<level>{level: <8}</level> "
+    )
+
+    if env:
+        base_format += "[env: <yellow>{extra[env]}</yellow>] "
+    if layer:
+        base_format += "[layer: <yellow>{extra[layer]}</yellow>] "
+
+    base_format += (
+        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
+        "<level>{message}</level>\n"
+    )
+
+    format_string = base_format if env or layer else LOGURU_FORMAT
+
+    formatted_record = format_string.format_map(record)
+    return formatted_record
+
 
 def init_logging(level=logging.DEBUG):
     import logging

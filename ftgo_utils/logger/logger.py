@@ -34,9 +34,9 @@ env = record["extra"].get("env")
     )
 
     if env:
-        base_format += f"[<yellow>{env.upper()}</yellow>] <magenta>|</magenta> "
+        base_format += f"<blue>{env.upper()}</blue> <magenta>|</magenta> "
     if layer:
-        base_format += f"[<yellow>{layer.upper()}</yellow>] <magenta>|</magenta> "
+        base_format += f"<yellow>{layer.upper()}</yellow> <magenta>|</magenta> "
 
     base_format += (
         "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> "

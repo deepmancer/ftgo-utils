@@ -32,9 +32,9 @@ def format_record(record: dict) -> str:
     )
 
     if env:
-        base_format += "[env: <yellow>{extra[env]}</yellow>] "
+        base_format += f"[<yellow>{env.upper()}</yellow>] "
     if layer:
-        base_format += "[layer: <yellow>{extra[layer]}</yellow>] "
+        base_format += f"[<yellow>{layer.upper()}</yellow>] "
 
     base_format += (
         "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "

@@ -23,14 +23,13 @@ class InterceptHandler(logging.Handler):
         )
 
 
-def format_record(record: dict) -> str:
-    env = record["extra"].get("env")
+env = record["extra"].get("env")
     layer = record["extra"].get("layer")
 
     base_format = (
         "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> "
         "<magenta>|</magenta> "
-        "<level>{level: <8}</level> "
+        "<level>{level}</level> "
         "<magenta>|</magenta> "
     )
 

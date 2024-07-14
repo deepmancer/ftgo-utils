@@ -69,4 +69,4 @@ def get_logger(layer_name: Optional[str] = None, environment: Optional[str] = No
 
     if layer_name is None:
         return logger
-    return logger.bind(env= layer=layer_name)
+    return logger.bind(**binding_params)

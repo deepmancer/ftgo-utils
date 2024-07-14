@@ -22,28 +22,30 @@ class InterceptHandler(logging.Handler):
             level, record.getMessage()
         )
 
+
 def format_record(record: dict) -> str:
     env = record["extra"].get("env")
     layer = record["extra"].get("layer")
 
     base_format = (
         "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> "
+        "<magenta>|</magenta> "
         "<level>{level: <8}</level> "
+        "<magenta>|</magenta> "
     )
 
     if env:
-        base_format += f"[<yellow>{env.upper()}</yellow>] "
+        base_format += f"[<yellow>{env.upper()}</yellow>] <magenta>|</magenta> "
     if layer:
-        base_format += f"[<yellow>{layer.upper()}</yellow>] "
+        base_format += f"[<yellow>{layer.upper()}</yellow>] <magenta>|</magenta> "
 
     base_format += (
-        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
+        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> "
+        "<magenta>|</magenta> "
         "<level>{message}</level>\n"
     )
 
-    format_string = base_format if env or layer else LOGURU_FORMAT
-
-    formatted_record = format_string.format_map(record)
+    formatted_record = base_format.format_map(record)
     return formatted_record
 
 
@@ -64,7 +66,7 @@ def init_logging(level=logging.DEBUG):
 
     logger.configure(
         handlers=[
-            {"sink": sys.stdout, "level": level, "format": format_record},
+            {"sink": sys.stdout, "level": level, "colorize": True, "format": format_record},
             {"sink": "logfile.log", "level": level, "format": format_record, "enqueue": True},
         ]
     )

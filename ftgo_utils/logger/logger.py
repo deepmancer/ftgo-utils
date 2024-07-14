@@ -13,7 +13,6 @@ class InterceptHandler(logging.Handler):
         except ValueError:
             level = record.levelno
 
-        # Find caller from where originated the logged message
         frame, depth = logging.currentframe(), 2
         while frame.f_code.co_filename == logging.__file__:
             frame = frame.f_back
@@ -34,13 +33,9 @@ def format_record(record: dict) -> str:
     format_string += "{exception}\n"
     return format_string
 
-def init_logging(level=logging.DEBUG):
+def init_logging(level=logging.DEBUG, environment: str = "production"):
     import logging
-    import sys
-    from pprint import pformat
-
     from loguru import logger
-    from loguru._defaults import LOGURU_FORMAT
 
     loggers = (
         logging.getLogger(name)
@@ -50,14 +45,17 @@ def init_logging(level=logging.DEBUG):
     for uvicorn_logger in loggers:
         uvicorn_logger.handlers = []
 
-    # change handler for default uvicorn logger
     intercept_handler = InterceptHandler()
     logging.getLogger("uvicorn").handlers = [intercept_handler]
 
-    # set logs output, level and format
     logger.configure(
-        handlers=[{"sink": sys.stdout, "level": level, "format": format_record}]
+        handlers=[
+            {"sink": sys.stdout, "level": level, "format": format_record},
+            {"sink": "logfile.log", "level": level, "format": format_record, "enqueue": True},
+        ]
     )
+
+    logger = logger.bind(env=environment)
 
 def get_logger(layer_name: Optional[str] = None):
     from loguru import logger

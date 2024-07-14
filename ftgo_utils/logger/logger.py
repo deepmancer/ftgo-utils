@@ -33,7 +33,7 @@ def format_record(record: dict) -> str:
     format_string += "{exception}\n"
     return format_string
 
-def init_logging(level=logging.DEBUG, environment: str = "dev"):
+def init_logging(level=logging.DEBUG):
     import logging
     from loguru import logger
 
@@ -55,10 +55,18 @@ def init_logging(level=logging.DEBUG, environment: str = "dev"):
         ]
     )
 
-    logger = logger.bind(env=environment)
-
-def get_logger(layer_name: Optional[str] = None):
+def get_logger(layer_name: Optional[str] = None, environment: Optional[str] = None):
     from loguru import logger
+    binding_params = {}
+    if layer_name is not None:
+        binding_params['layer'] = layer_name
+    if environment is not None:
+        binding_params['env'] = environment
+
+    if not binding_params:
+        return logger
+    return logger.bind(**binding_params)
+
     if layer_name is None:
         return logger
-    return logger.bind(layer=layer_name)
+    return logger.bind(env= layer=layer_name)

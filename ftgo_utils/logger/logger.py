@@ -22,8 +22,8 @@ class InterceptHandler(logging.Handler):
             level, record.getMessage()
         )
 
-
-env = record["extra"].get("env")
+def format_record(record: dict) -> str:
+    env = record["extra"].get("env")
     layer = record["extra"].get("layer")
 
     base_format = (

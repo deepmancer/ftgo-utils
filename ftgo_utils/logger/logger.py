@@ -33,7 +33,7 @@ def format_record(record: dict) -> str:
     format_string += "{exception}\n"
     return format_string
 
-def init_logging(level=logging.DEBUG, environment: str = "production"):
+def init_logging(level=logging.DEBUG, environment: str = "dev"):
     import logging
     from loguru import logger
 

@@ -9,3 +9,4 @@ from . import redis_connector
 from . import utc_time
 from . import uuid_gen
 from . import validation
+from .wrappers import class_property

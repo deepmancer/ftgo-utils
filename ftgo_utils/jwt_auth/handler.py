@@ -1,3 +1,4 @@
+import copy
 import datetime
 from typing import Optional, Dict, Any, List
 
@@ -5,11 +6,11 @@ import jwt as jwt_original_lib
 import pytz
 
 def encode(payload: Dict[str, Any], secret: str, algorithm: str, expiration: Optional[int] = None, **kwargs) -> str:
-
+    _payload = copy.deepcopy(payload)
     if expiration:
-        payload['exp'] = datetime.datetime.now(tz=pytz.UTC) + datetime.timedelta(seconds=expiration)
-    payload.update(kwargs)
-    token = jwt_original_lib.encode(payload, secret, algorithm=algorithm)
+        _payload['exp'] = datetime.datetime.now(tz=pytz.UTC) + datetime.timedelta(seconds=expiration)
+    _payload.update(kwargs)
+    token = jwt_original_lib.encode(_payload, secret, algorithm=algorithm)
     return token
 
 def decode(token: str, secret: str, algorithms: Optional[List[str]] = None, verify: bool = True, **kwargs) -> Dict[str, Any]:

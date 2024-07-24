@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import Field
 
 from .base import BaseModel as BaseSchema

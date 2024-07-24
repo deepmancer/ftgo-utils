@@ -3,6 +3,7 @@ from .base import BaseModel as BaseSchema
 from .fields import (
     AuthCodeMixin, EmailMixin, GenderMixin, LocationPointMixin,
     NationalIdMixin, PhoneNumberMixin, RoleMixin, uuid_field,
+    TokenMixin, UserIdMixin,
 )
 from .location import LocationMixin
 from .user import UserInfoMixin, UserMixin
@@ -20,9 +21,11 @@ __all__ = [
     'NationalIdMixin',
     'PhoneNumberMixin',
     'RoleMixin',
+    'TokenMixin',
     'UserInfoMixin',
     'UserMixin',
     'VehicleInfoMixin',
     'VehicleMixin',
+    'UserIdMixin',
     'uuid_field',
 ]

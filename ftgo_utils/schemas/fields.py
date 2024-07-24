@@ -5,6 +5,9 @@ from ..enums import Roles, Gender
 from ..validation import validate_phone_number, validate_enum_value
 from .base import BaseModel as BaseSchema
 
+def uuid_field() -> Field:
+    return Field(..., min_length=1, max_length=128)
+
 class EmailMixin(BaseSchema):
     email: EmailStr = Field(..., min_length=1, max_length=100)
 
@@ -57,5 +60,8 @@ class AuthCodeMixin(BaseSchema):
             raise ValidationError('auth_code should only contain digits')
         return value
 
-def uuid_field() -> Field:
-    return Field(..., min_length=1, max_length=36)
+class UserIdMixin(BaseSchema):
+    user_id: str = Field(..., min_length=1, max_length=128)
+
+class TokenMixin(BaseSchema):
+    token: str = Field(..., min_length=1, max_length=1024)

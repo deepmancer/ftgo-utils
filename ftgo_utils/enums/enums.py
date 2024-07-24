@@ -14,6 +14,7 @@ class Gender(str, Enum):
 
 class ResponseStatus(str, Enum):
     SUCCESS = 'success'
+    FAILIURE = 'failiure'
     ERROR = 'error'
 
 class OrderStatus(str, Enum):
@@ -37,7 +38,6 @@ class PaymentMode(str, Enum):
     UPI = 'upi'
     NET_BANKING = 'net_banking'
     WALLET = 'wallet'
-
 
 class DriverStatus(str, Enum):
     ONLINE = 'online'

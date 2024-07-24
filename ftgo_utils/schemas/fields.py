@@ -1,10 +1,12 @@
 from typing import Optional
-from pydantic import BaseModel, Field, field_validator, ConfigDict, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator, EmailStr
 
 from ..enums import Roles, Gender
 from ..validation import validate_phone_number, validate_enum_value
-
 from .base import BaseModel as BaseSchema
+
+class EmailMixin(BaseSchema):
+    email: EmailStr = Field(..., min_length=1, max_length=100)
 
 class PhoneNumberMixin(BaseSchema):
     phone_number: str = Field(..., min_length=10, max_length=14)
@@ -12,7 +14,6 @@ class PhoneNumberMixin(BaseSchema):
     @field_validator('phone_number', mode='before')
     def validate_phone_number_field(cls, value):
         return validate_phone_number(value)
-
 
 class RoleMixin(BaseSchema):
     role: str = Field(..., min_length=1, max_length=10)
@@ -43,9 +44,18 @@ class NationalIdMixin(BaseSchema):
             raise ValidationError('national_id should only contain digits')
         return value.strip()
 
-class LocationMixin(BaseSchema):
+class LocationPointMixin(BaseSchema):
     latitude: float = Field(..., ge=-90, le=90)
     longitude: float = Field(..., ge=-180, le=180)
+
+class AuthCodeMixin(BaseSchema):
+    auth_code: str = Field(..., min_length=6, max_length=10)
+    
+    @field_validator('auth_code', mode='before')
+    def validate_auth_code_field(cls, value):
+        if not value.isdigit():
+            raise ValidationError('auth_code should only contain digits')
+        return value
 
 def uuid_field() -> Field:
     return Field(..., min_length=1, max_length=36)

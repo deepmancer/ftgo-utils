@@ -1,4 +1,7 @@
-from .enums import Gender, Roles, OrderStatus, ResponseStatus, PaymentStatus, PaymentMode
+from .enums import (
+    Gender, Roles, OrderStatus, ResponseStatus, PaymentStatus, PaymentMode,
+    DriverAvailabilityStatus, DriverStatus,
+)
 
 __all__ = [
     'Gender',
@@ -7,4 +10,6 @@ __all__ = [
     'ResponseStatus',
     'PaymentStatus',
     'PaymentMode',
+    'DriverAvailabilityStatus',
+    'DriverStatus',
 ]

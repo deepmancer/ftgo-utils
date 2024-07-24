@@ -2,9 +2,9 @@ from typing import Optional
 from pydantic import Field
 
 from .base import BaseModel as BaseSchema
-from .fields import LocationMixin, uuid_field
+from .fields import LocationPointMixin, uuid_field
 
-class AddressInfoMixin(LocationMixin):
+class AddressInfoMixin(LocationPointMixin):
     address_line_1: str = Field(..., min_length=1, max_length=100)
     address_line_2: Optional[str] = Field(None, max_length=100)
     city: str = Field(..., min_length=1, max_length=50)

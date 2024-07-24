@@ -1,22 +1,22 @@
 from enum import Enum
 
-class Roles(Enum):
+class Roles(str, Enum):
     CUSTOMER = "customer"
     ADMIN = "admin"
     RESTAURANT_ADMIN = "restaurant_admin"
     DRIVER = "driver"
     STAFF = "staff"
 
-class Gender(Enum):
+class Gender(str, Enum):
     MALE = 'male'
     FEMALE = 'female'
     UNKNOWN = 'unknown'
 
-class ResponseStatus(Enum):
+class ResponseStatus(str, Enum):
     SUCCESS = 'success'
     ERROR = 'error'
 
-class OrderStatus(Enum):
+class OrderStatus(str, Enum):
     PENDING = 'pending'
     CONFIRMED = 'confirmed'
     CANCELLED = 'cancelled'
@@ -25,15 +25,24 @@ class OrderStatus(Enum):
     READY_FOR_DELIVERY = 'ready_for_delivery'
     IN_TRANSIT = 'in_transit'
     
-class PaymentStatus(Enum):
+class PaymentStatus(str, Enum):
     PENDING = 'pending'
     PAID = 'paid'
     FAILED = 'failed'
     REFUNDED = 'refunded'
 
-class PaymentMode(Enum):
+class PaymentMode(str, Enum):
     CASH = 'cash'
     CARD = 'card'
     UPI = 'upi'
     NET_BANKING = 'net_banking'
     WALLET = 'wallet'
+
+
+class DriverStatus(str, Enum):
+    ONLINE = 'online'
+    OFFLINE = 'offline'
+    
+class DriverAvailabilityStatus(str, Enum):
+    AVAILABLE = 'available'
+    OCCUPIED = 'occupied'

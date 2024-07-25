@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ftgo_utils",
-    version="0.1.5",
+    version="0.2.0",
     description="Shared utilities for FTGO platform",
     author="Alireza Heidari",
     author_email="alirezaheidari.cs@gmail.com",
@@ -25,6 +25,7 @@ setup(
         "pwdlib",
         "validators",
         "pydantic[email]",
+        "addict",
     ],
     license='Apache License 2.0',
     classifiers=[

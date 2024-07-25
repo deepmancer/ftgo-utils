@@ -25,7 +25,6 @@ setup(
         "pwdlib",
         "validators",
         "pydantic[email]",
-        "addict",
     ],
     license='Apache License 2.0',
     classifiers=[

@@ -1,10 +1,10 @@
+import json
 import logging
 import sys
-from pprint import pformat
-from typing import Optional
+from typing import Optional, Union
 
 from loguru import logger
-from loguru._defaults import LOGURU_FORMAT
+
 
 class InterceptHandler(logging.Handler):
     def emit(self, record: logging.LogRecord):
@@ -14,7 +14,7 @@ class InterceptHandler(logging.Handler):
             level = record.levelno
 
         frame, depth = logging.currentframe(), 2
-        while frame.f_code.co_filename == logging.__file__:
+        while frame and frame.f_code.co_filename == logging.__file__:
             frame = frame.f_back
             depth += 1
 
@@ -22,36 +22,36 @@ class InterceptHandler(logging.Handler):
             level, record.getMessage()
         )
 
+
 def format_record(record: dict) -> str:
-    env = record["extra"].get("env")
-    layer = record["extra"].get("layer")
-
-    base_format = (
-        "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> "
-        "<magenta>|</magenta> "
-        "<level>{level}</level> "
-        "<magenta>|</magenta> "
+    from loguru._defaults import LOGURU_FORMAT, env
+    format_string = (
+        "<green>{time:HH:mm:ss}</green> | "
+        "<level>{level}</level> | "
     )
+    
+    if record["extra"]:
+        for binding_key, binding_value in record["extra"].items():
+            if binding_key.startswith("custom_bind_"):
+                format_string += f"<blue><b>{binding_key[12:].upper()}: {binding_value!r}</b></blue> | "
+    
+    format_string += "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
 
-    if env:
-        base_format += f"<blue>{env.upper()}</blue> <magenta>|</magenta> "
-    if layer:
-        base_format += f"<yellow>{layer.upper()}</yellow> <magenta>|</magenta> "
+    if "payload" in record["extra"]:
+        payload_str = "payload=dict(" + json.dumps(
+            record["extra"]["payload"], indent=4
+        )[1:-1] + ")"
+        record["extra"]["payload"] = payload_str
+        format_string += "\n<level>{extra[payload]}</level>\n"
 
-    base_format += (
-        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> "
-        "<magenta>|</magenta> "
-        "<level>{message}</level>\n"
-    )
+    if record.get('exc_info') or record.get('exception'):
+        format_string += "\n"
+        
+    format_string += "{exception}\n"
+    
+    return env("LOGURU_FORMAT", str, format_string)
 
-    formatted_record = base_format.format_map(record)
-    return formatted_record
-
-
-def init_logging(level=logging.DEBUG):
-    import logging
-    from loguru import logger
-
+def init_logging(level: Optional[Union[str, int]] = "DEBUG"):
     loggers = (
         logging.getLogger(name)
         for name in logging.root.manager.loggerDict
@@ -64,24 +64,10 @@ def init_logging(level=logging.DEBUG):
     logging.getLogger("uvicorn").handlers = [intercept_handler]
 
     logger.configure(
-        handlers=[
-            {"sink": sys.stdout, "level": level, "colorize": True, "format": format_record},
-            {"sink": "logfile.log", "level": level, "format": format_record, "enqueue": True},
-        ]
+        handlers=[{"sink": sys.stdout, "level": level, "format": format_record}]
     )
 
-def get_logger(layer_name: Optional[str] = None, environment: Optional[str] = None):
-    from loguru import logger
-    binding_params = {}
-    if layer_name is not None:
-        binding_params['layer'] = layer_name
-    if environment is not None:
-        binding_params['env'] = environment
-
+def get_logger(**binding_params):
     if not binding_params:
         return logger
-    return logger.bind(**binding_params)
-
-    if layer_name is None:
-        return logger
-    return logger.bind(**binding_params)
+    return logger.bind(**{f"custom_bind_{k}": v for k, v in binding_params.items()})

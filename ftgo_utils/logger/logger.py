@@ -18,7 +18,7 @@ class InterceptHandler(logging.Handler):
             frame = frame.f_back
             depth += 1
 
-        logger.opt(depth=depth, exception=record.exc_info).log(
+        logger.opt(depth=depth, exception=record.exc_info, colors=True).log(
             level, record.getMessage()
         )
 
@@ -49,7 +49,8 @@ def format_record(record: dict) -> str:
         
     format_string += "{exception}\n"
     
-    return env("LOGURU_FORMAT", str, format_string)
+    format_obj = env("LOGURU_FORMAT", str, format_string)
+    return format_obj.format_map(record)
 
 def init_logging(level: Optional[Union[str, int]] = "DEBUG"):
     loggers = (
@@ -64,7 +65,7 @@ def init_logging(level: Optional[Union[str, int]] = "DEBUG"):
     logging.getLogger("uvicorn").handlers = [intercept_handler]
 
     logger.configure(
-        handlers=[{"sink": sys.stdout, "level": level, "format": format_record}]
+        handlers=[{"sink": sys.stdout, "level": level, "colorize": True, "format": format_record}]
     )
 
 def get_logger(**binding_params):

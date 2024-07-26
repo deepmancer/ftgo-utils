@@ -50,16 +50,33 @@ def format_record(record: dict) -> str:
 
     return format_string
 
-def init_logging(level: Optional[Union[str, int]] = logging.DEBUG):
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
+def init_logging(level: Union[int, str] = logging.INFO):
+    import logging
+    from loguru import logger
+
+    loggers = (
+        logging.getLogger(name)
+        for name in logging.root.manager.loggerDict
+    )
+    for uvicorn_logger in loggers:
+        uvicorn_logger.handlers = []
 
     intercept_handler = InterceptHandler()
-    logging.getLogger().handlers = [intercept_handler]
-    logging.getLogger().setLevel(level)
-
+    logging.getLogger("uvicorn").handlers = [intercept_handler]
+    logging.getLogger("uvicorn.access").handlers = [intercept_handler]
+    logging.getLogger("uvicorn.error").handlers = [intercept_handler]
+    logging.getLogger("uvicorn.asgi").handlers = [intercept_handler]
+    logging.getLogger("uvicorn.error").handlers = [intercept_handler]
+    
+    # setup the intercept handler as the whole root logger's handler
+    logging.root.handlers = [intercept_handler]
+    logging.basicConfig(handlers=[InterceptHandler()], level=level, encoding="utf-8", force=True)
+    
     logger.configure(
-        handlers=[{"sink": sys.stdout, "level": level, "colorize": True, "format": format_record}]
+        handlers=[
+            {"sink": sys.stdout, "level": level, "colorize": True, "format": format_record},
+            {"sink": "logfile.log", "level": level, "format": format_record, "enqueue": True},
+        ]
     )
 
 def get_logger(**binding_params):

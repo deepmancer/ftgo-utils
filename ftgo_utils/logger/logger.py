@@ -24,7 +24,6 @@ class InterceptHandler(logging.Handler):
 
 
 def format_record(record: dict) -> str:
-    from loguru._defaults import LOGURU_FORMAT, env
     format_string = (
         "<green>{time:HH:mm:ss}</green> | "
         "<level>{level}</level> | "
@@ -49,8 +48,7 @@ def format_record(record: dict) -> str:
 
     format_string += "{exception}\n"
 
-    format_obj = env("LOGURU_FORMAT", str, format_string)
-    return format_obj
+    return format_string
 
 def init_logging(level: Optional[Union[str, int]] = logging.DEBUG):
     for handler in logging.root.handlers[:]:
@@ -61,10 +59,12 @@ def init_logging(level: Optional[Union[str, int]] = logging.DEBUG):
     logging.getLogger().setLevel(level)
 
     logger.configure(
-        handlers=[{"sink": sys.stdout, "level": level, "colorize": sys.stdout.isatty(), "format": format_record}]
+        handlers=[{"sink": sys.stdout, "level": level, "colorize": True, "format": format_record}]
     )
 
 def get_logger(**binding_params):
     if not binding_params:
         return logger
     return logger.bind(**{f"custom_bind_{k}": v for k, v in binding_params.items()})
+
+__all__ = ["init_logging", "get_logger"]

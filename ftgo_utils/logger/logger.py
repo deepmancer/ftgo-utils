@@ -18,7 +18,7 @@ class InterceptHandler(logging.Handler):
             frame = frame.f_back
             depth += 1
 
-        logger.opt(depth=depth, exception=record.exc_info, colors=True).log(
+        logger.opt(depth=depth, exception=record.exc_info, ansi=True).log(
             level, record.getMessage()
         )
 
@@ -29,12 +29,12 @@ def format_record(record: dict) -> str:
         "<green>{time:HH:mm:ss}</green> | "
         "<level>{level}</level> | "
     )
-    
+
     if record["extra"]:
         for binding_key, binding_value in record["extra"].items():
             if binding_key.startswith("custom_bind_"):
                 format_string += f"<blue><b>{binding_key[12:].upper()}: {binding_value!r}</b></blue> | "
-    
+
     format_string += "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
 
     if "payload" in record["extra"]:
@@ -46,26 +46,22 @@ def format_record(record: dict) -> str:
 
     if record.get('exc_info') or record.get('exception'):
         format_string += "\n"
-        
+
     format_string += "{exception}\n"
-    
+
     format_obj = env("LOGURU_FORMAT", str, format_string)
     return format_obj
 
 def init_logging(level: Optional[Union[str, int]] = logging.DEBUG):
-    loggers = (
-        logging.getLogger(name)
-        for name in logging.root.manager.loggerDict
-        if name.startswith("uvicorn.")
-    )
-    for uvicorn_logger in loggers:
-        uvicorn_logger.handlers = []
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
 
     intercept_handler = InterceptHandler()
-    logging.getLogger("uvicorn").handlers = [intercept_handler]
+    logging.getLogger().handlers = [intercept_handler]
+    logging.getLogger().setLevel(level)
 
     logger.configure(
-        handlers=[{"sink": sys.stdout, "level": level, "colorize": True, "format": format_record}]
+        handlers=[{"sink": sys.stdout, "level": level, "colorize": sys.stdout.isatty(), "format": format_record}]
     )
 
 def get_logger(**binding_params):

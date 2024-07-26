@@ -50,9 +50,9 @@ def format_record(record: dict) -> str:
     format_string += "{exception}\n"
     
     format_obj = env("LOGURU_FORMAT", str, format_string)
-    return format_obj.format_map(record)
+    return format_obj
 
-def init_logging(level: Optional[Union[str, int]] = "DEBUG"):
+def init_logging(level: Optional[Union[str, int]] = logging.DEBUG):
     loggers = (
         logging.getLogger(name)
         for name in logging.root.manager.loggerDict

@@ -28,7 +28,7 @@ class ErrorCode(BaseModel):
     class Config:
         frozen = True
 
-    @field_validator('category', pre=True)
+    @field_validator('category', mode='before')
     def validate_category_field(cls, value):
         if not value:
             return ErrorCategory.GENERIC_ERROR

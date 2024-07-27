@@ -1,5 +1,6 @@
 import json
 import logging
+import orjson
 import sys
 import pickle
 import base64   
@@ -37,9 +38,8 @@ def format_record(record: dict) -> str:
 
     if "payload" in record["extra"]:
         try:
-            payload_bytes = pickle.dumps(record["extra"]["payload"])
-            payload_base64 = base64.b64encode(payload_bytes).decode('utf-8')
-            record["extra"]["payload"] = payload_base64
+            payload = json.dumps(record["extra"]["payload"], indent=2, default=vars)
+            record["extra"]["payload"] = payload
             format_string += "\n<level>Payload: {extra[payload]}</level>\n"
         except pickle.PickleError as e:
             format_string += f"\n<level>Payload could not be serialized: {e}</level>\n"

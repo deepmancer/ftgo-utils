@@ -20,7 +20,7 @@ class ErrorCategory(str, Enum):
 
 
 class ErrorCode(BaseModel):
-    id: str = Field(...)
+    value: str = Field(...)
     category: Optional[Union[ErrorCategory, str]] = Field(default=ErrorCategory.GENERIC_ERROR.value)
     status_code: Optional[int] = Field(None)
     description: Optional[str] = Field(None, alias='message')

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ftgo_utils",
-    version="0.7.0",
+    version="0.8.0",
     description="Shared utilities for FTGO platform",
     author="Alireza Heidari",
     author_email="alirezaheidari.cs@gmail.com",

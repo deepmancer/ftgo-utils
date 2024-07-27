@@ -445,6 +445,34 @@ class ErrorCodes:
         value="API_RATE_LIMIT_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
+    MISSING_AUTHORIZATION_HEADER_ERROR = ErrorCode(
+        value="MISSING_AUTHORIZATION_HEADER_ERROR",
+        category=ErrorCategory.VALIDATION_ERROR,
+    )
+    INVALID_AUTHORIZATION_HEADER_ERROR = ErrorCode(
+        value="INVALID_AUTHORIZATION_HEADER_ERROR",
+        category=ErrorCategory.VALIDATION_ERROR,
+    )
+    INVALID_AUTHORIZATION_SCHEME_ERROR = ErrorCode(
+        value="INVALID_AUTHORIZATION_SCHEME_ERROR",
+        category=ErrorCategory.VALIDATION_ERROR,
+    )
+    INVALID_TOKEN_ERROR = ErrorCode(
+        value="INVALID_TOKEN_ERROR",
+        category=ErrorCategory.VALIDATION_ERROR,
+    )
+    TOKEN_NOT_FOUND_ERROR = ErrorCode(
+        value="TOKEN_NOT_FOUND_ERROR",
+        category=ErrorCategory.CACHE_ERROR,
+    )
+    IDENTITY_MISMATCH_ERROR = ErrorCode(
+        value="IDENTITY_MISMATCH_ERROR",
+        category=ErrorCategory.VALIDATION_ERROR,
+    )
+    INTERNAL_AUTHENTICATION_ERROR = ErrorCode(
+        value="INTERNAL_AUTHENTICATION_ERROR",
+        category=ErrorCategory.SERVER_ERROR,
+    )
 
     # Driver Errors
     VEHICLE_SUBMISSION_ERROR = ErrorCode(

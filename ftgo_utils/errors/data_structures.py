@@ -1,8 +1,6 @@
 import json
 from enum import Enum
-from typing import Optional
-
-from pydantic import BaseModel, Field
+from typing import Optional, Union
 
 class ErrorCategory(str, Enum):
     CLIENT_ERROR = 'client_error'
@@ -22,13 +20,12 @@ class ErrorCode:
     def __init__(
         self,
         value: str,
-        category: Optional[Union[ErrorCategory, str]] = ErrorCategory.GENERIC_ERROR.value,
+        category: Optional[Union[ErrorCategory, str]] = ErrorCategory.GENERIC_ERROR,
         status_code: Optional[int] = None,
         description: Optional[str] = None,
     ):
         self._value = value
-        self._category = category.value if isinstance(category, ErrorCategory) else category
-        self._category = str(self._category)
+        self._category = category.value if isinstance(category, ErrorCategory) else str(category)
         self._status_code = status_code
         self._description = description
         
@@ -41,11 +38,11 @@ class ErrorCode:
         return self._category
     
     @property
-    def status_code(self) -> int:
+    def status_code(self) -> Optional[int]:
         return self._status_code
     
     @property
-    def description(self) -> str:
+    def description(self) -> Optional[str]:
         return self._description
 
     def to_dict(self) -> dict:
@@ -59,5 +56,3 @@ class ErrorCode:
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict(), indent=4)
-
-__all__ = ["ErrorCode", "ErrorCategory"]

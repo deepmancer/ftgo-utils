@@ -55,7 +55,7 @@ class ErrorCode:
         return {k: v for k, v in error_code_details.items() if v is not None}
 
     def toJSON(self) -> str:
-        return json.dumps(self.to_dict(), indent=4)
+        return json.dumps(self.to_dict(), indent=4, default=vars)
     
     def to_json(self) -> str:
         return self.toJSON()

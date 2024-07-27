@@ -38,7 +38,7 @@ def format_record(record: dict) -> str:
 
     if "payload" in record["extra"]:
         payload_str = "payload=dict(" + json.dumps(
-            record["extra"]["payload"], indent=4
+            record["extra"]["payload"], indent=4, default=vars,
         )[1:-1] + ")"
         record["extra"]["payload"] = payload_str
         format_string += "\n<level>{extra[payload]}</level>\n"

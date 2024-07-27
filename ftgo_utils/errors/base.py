@@ -4,7 +4,6 @@ import uuid
 from typing import Any, Dict, Optional, Union
 
 from .data_structures import ErrorCode
-
 class BaseError(Exception):
     def __init__(
         self,
@@ -32,7 +31,7 @@ class BaseError(Exception):
     def to_dict(self) -> Dict[str, Any]:
         error_details = {
             "error_id": self.error_id,
-            "error_code": self.error_code,
+            "error_code": self.error_code.to_dict(),
             "message": self.message,
             "payload": self.payload,
             "timestamp": self.timestamp,

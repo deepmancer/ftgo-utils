@@ -18,17 +18,44 @@ class ErrorCategory(str, Enum):
     RESOURCE_LIMIT_ERROR = 'resource_limit_error'
     GENERIC_ERROR = 'generic_error'
 
-class ErrorCode(BaseModel):
-    value: str = Field(...)
-    category: Optional[ErrorCategory] = Field(default=ErrorCategory.GENERIC_ERROR)
-    status_code: Optional[int] = Field(None)
-    description: Optional[str] = Field(None)
-
-    class Config:
-        frozen = True
+class ErrorCode:
+    def __init__(
+        self,
+        value: str,
+        category: Optional[Union[ErrorCategory, str]] = ErrorCategory.GENERIC_ERROR.value,
+        status_code: Optional[int] = None,
+        description: Optional[str] = None,
+    ):
+        self._value = value
+        self._category = category.value if isinstance(category, ErrorCategory) else category
+        self._category = str(self._category)
+        self._status_code = status_code
+        self._description = description
+        
+    @property
+    def value(self) -> str:
+        return self._value
+    
+    @property
+    def category(self) -> str:
+        return self._category
+    
+    @property
+    def status_code(self) -> int:
+        return self._status_code
+    
+    @property
+    def description(self) -> str:
+        return self._description
 
     def to_dict(self) -> dict:
-        return self.dict(exclude_none=True)
+        error_code_details = {
+            "value": self.value,
+            "category": self.category,
+            "status_code": self.status_code,
+            "description": self.description,
+        }
+        return {k: v for k, v in error_code_details.items() if v is not None}
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict(), indent=4)

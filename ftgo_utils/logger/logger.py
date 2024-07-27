@@ -37,14 +37,13 @@ def format_record(record: dict) -> str:
 
     if "payload" in record["extra"]:
         try:
-            payload = json.dumps(record["extra"]["payload"], indent=4, default=str)
-            record["extra"]["payload"] = payload
-            format_string += "\n<level>Payload: {extra[payload]}</level>\n"
+            record["extra"]["payload"] = json.dumps(record["extra"]["payload"], indent=4, default=str)
+            format_string += "\n<level>Payload: {extra[payload]}</level>"
         except pickle.PickleError as e:
-            format_string += f"\n<level>Payload could not be serialized: {e}</level>\n"
+            format_string += f"\n<level>Payload could not be serialized: {e}</level>"
 
     if record.get('exception', None) is not None:
-        format_string += "{exception}\n"
+        format_string += "\n{exception}"
 
     return format_string
 

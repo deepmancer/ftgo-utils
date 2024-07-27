@@ -1,10 +1,10 @@
 import json
 import logging
 import sys
+import pickle
+import base64   
 from typing import Optional, Union
-
 from loguru import logger
-
 
 class InterceptHandler(logging.Handler):
     def emit(self, record: logging.LogRecord):
@@ -22,14 +22,13 @@ class InterceptHandler(logging.Handler):
             level, record.getMessage()
         )
 
-
 def format_record(record: dict) -> str:
     format_string = (
         "<green>{time:HH:mm:ss}</green> | "
         "<level>{level}</level> | "
     )
 
-    if record["extra"]:
+    if "extra" in record and record["extra"]:
         for binding_key, binding_value in record["extra"].items():
             if binding_key.startswith("custom_bind_"):
                 format_string += f"<blue><b>{binding_key[12:].upper()}: {binding_value!r}</b></blue> | "
@@ -37,16 +36,16 @@ def format_record(record: dict) -> str:
     format_string += "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
 
     if "payload" in record["extra"]:
-        payload_str = "payload=dict(" + json.dumps(
-            record["extra"]["payload"], indent=4, default=vars,
-        )[1:-1] + ")"
-        record["extra"]["payload"] = payload_str
-        format_string += "\n<level>{extra[payload]}</level>\n"
+        try:
+            payload_bytes = pickle.dumps(record["extra"]["payload"])
+            payload_base64 = base64.b64encode(payload_bytes).decode('utf-8')
+            record["extra"]["payload"] = payload_base64
+            format_string += "\n<level>Payload: {extra[payload]}</level>\n"
+        except pickle.PickleError as e:
+            format_string += f"\n<level>Payload could not be serialized: {e}</level>\n"
 
-    if record.get('exc_info') or record.get('exception'):
-        format_string += "\n"
-
-    format_string += "{exception}\n"
+    if record.get('exception', None) is not None:
+        format_string += "{exception}\n"
 
     return format_string
 
@@ -80,6 +79,8 @@ def init_logging(level: Union[int, str] = logging.INFO):
     )
 
 def get_logger(**binding_params):
+    from loguru import logger
+
     if not binding_params:
         return logger
     return logger.bind(**{f"custom_bind_{k}": v for k, v in binding_params.items()})

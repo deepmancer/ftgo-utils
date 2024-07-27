@@ -475,5 +475,9 @@ class ErrorCodes:
         value="VEHICLE_VALIDATION_ERROR",
         category=ErrorCategory.VALIDATION_ERROR,
     )
-    
+
+    @classmethod
+    def get_error_code(cls, error_code: str) -> ErrorCode:
+        return getattr(cls, error_code, cls.UNKNOWN_ERROR)
+
 __all__ = ["ErrorCodes"]

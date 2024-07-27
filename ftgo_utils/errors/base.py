@@ -40,7 +40,7 @@ class BaseError(Exception):
         return {k: v for k, v in error_details.items() if v is not None}
 
     def toJSON(self) -> str:
-        return json.dumps(self.to_dict(), indent=4, default=vars)
+        return json.dumps(self.to_dict(), indent=4, default=str)
     
     def to_json(self) -> str:
         return self.toJSON()

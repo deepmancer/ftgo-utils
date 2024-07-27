@@ -1,6 +1,5 @@
 import json
 import logging
-import orjson
 import sys
 import pickle
 import base64   
@@ -38,7 +37,7 @@ def format_record(record: dict) -> str:
 
     if "payload" in record["extra"]:
         try:
-            payload = json.dumps(record["extra"]["payload"], indent=2, default=vars)
+            payload = json.dumps(record["extra"]["payload"], indent=4, default=str)
             record["extra"]["payload"] = payload
             format_string += "\n<level>Payload: {extra[payload]}</level>\n"
         except pickle.PickleError as e:

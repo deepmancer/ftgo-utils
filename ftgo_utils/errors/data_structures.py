@@ -31,6 +31,6 @@ class ErrorCode(BaseModel):
         return self.dict(exclude_none=True)
 
     def to_json(self) -> str:
-        return json.dumps(self.to_dict(), default=str, indent=4)
+        return json.dumps(self.to_dict(), indent=4)
 
 __all__ = ["ErrorCode", "ErrorCategory"]

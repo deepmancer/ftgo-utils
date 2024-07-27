@@ -15,7 +15,7 @@ class BaseError(Exception):
         source: Optional[str] = None,
         **kwargs
     ):
-        super().__init__(message or str(error_code))
+        super().__init__(message or error_code.to_json())
         self.error_id = uuid.uuid4().hex
         self.error_code = error_code
         self.payload = payload or {}
@@ -30,9 +30,9 @@ class BaseError(Exception):
         return f"{self.__class__.__name__}({self.to_json()})"
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        error_details = {
             "error_id": self.error_id,
-            "error_code": self.error_code.to_dict(),
+            "error_code": self.error_code,
             "message": self.message,
             "payload": self.payload,
             "timestamp": self.timestamp,
@@ -41,6 +41,6 @@ class BaseError(Exception):
         return {k: v for k, v in error_details.items() if v is not None}
 
     def to_json(self) -> str:
-        return json.dumps(self.to_dict(), default=str, indent=4)
+        return json.dumps(self.to_dict(), indent=4)
 
 __all__ = ["BaseError"]

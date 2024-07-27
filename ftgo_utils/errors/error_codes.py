@@ -397,52 +397,52 @@ class ErrorCodes:
     )
 
     # API Errors
-    API_CONNECTION_ERROR = ErrorCode(
-        value="API_CONNECTION_ERROR",
+    SERVER_CONNECTION_ERROR = ErrorCode(
+        value="SERVER_CONNECTION_ERROR",
         category=ErrorCategory.NETWORK_ERROR,
     )
-    API_TIMEOUT_ERROR = ErrorCode(
-        value="API_TIMEOUT_ERROR",
+    SERVER_TIMEOUT_ERROR = ErrorCode(
+        value="SERVER_TIMEOUT_ERROR",
         category=ErrorCategory.NETWORK_ERROR,
     )
-    API_AUTHENTICATION_ERROR = ErrorCode(
-        value="API_AUTHENTICATION_ERROR",
+    SERVER_AUTHENTICATION_ERROR = ErrorCode(
+        value="SERVER_AUTHENTICATION_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
-    API_AUTHORIZATION_ERROR = ErrorCode(
-        value="API_AUTHORIZATION_ERROR",
+    SERVER_AUTHORIZATION_ERROR = ErrorCode(
+        value="SERVER_AUTHORIZATION_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
-    API_NOT_FOUND_ERROR = ErrorCode(
-        value="API_NOT_FOUND_ERROR",
+    SERVER_NOT_FOUND_ERROR = ErrorCode(
+        value="SERVER_NOT_FOUND_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
-    API_METHOD_NOT_ALLOWED_ERROR = ErrorCode(
-        value="API_METHOD_NOT_ALLOWED_ERROR",
+    SERVER_METHOD_NOT_ALLOWED_ERROR = ErrorCode(
+        value="SERVER_METHOD_NOT_ALLOWED_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
-    API_PAYLOAD_TOO_LARGE_ERROR = ErrorCode(
-        value="API_PAYLOAD_TOO_LARGE_ERROR",
+    SERVER_PAYLOAD_TOO_LARGE_ERROR = ErrorCode(
+        value="SERVER_PAYLOAD_TOO_LARGE_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
-    API_UNSUPPORTED_MEDIA_TYPE_ERROR = ErrorCode(
-        value="API_UNSUPPORTED_MEDIA_TYPE_ERROR",
+    SERVER_UNSUPPORTED_MEDIA_TYPE_ERROR = ErrorCode(
+        value="SERVER_UNSUPPORTED_MEDIA_TYPE_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
-    API_VALIDATION_ERROR = ErrorCode(
-        value="API_VALIDATION_ERROR",
+    SERVER_VALIDATION_ERROR = ErrorCode(
+        value="SERVER_VALIDATION_ERROR",
         category=ErrorCategory.VALIDATION_ERROR,
     )
-    API_SERVER_ERROR = ErrorCode(
-        value="API_SERVER_ERROR",
+    SERVER_SERVER_ERROR = ErrorCode(
+        value="SERVER_SERVER_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
-    API_SERVICE_UNAVAILABLE_ERROR = ErrorCode(
-        value="API_SERVICE_UNAVAILABLE_ERROR",
+    SERVER_SERVICE_UNAVAILABLE_ERROR = ErrorCode(
+        value="SERVER_SERVICE_UNAVAILABLE_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
-    API_RATE_LIMIT_ERROR = ErrorCode(
-        value="API_RATE_LIMIT_ERROR",
+    SERVER_RATE_LIMIT_ERROR = ErrorCode(
+        value="SERVER_RATE_LIMIT_ERROR",
         category=ErrorCategory.SERVER_ERROR,
     )
     MISSING_AUTHORIZATION_HEADER_ERROR = ErrorCode(
@@ -502,6 +502,19 @@ class ErrorCodes:
     VEHICLE_VALIDATION_ERROR = ErrorCode(
         value="VEHICLE_VALIDATION_ERROR",
         category=ErrorCategory.VALIDATION_ERROR,
+    )
+    
+    INTERNAL_SERVER_ERROR = ErrorCode(
+        value="INTERNAL_SERVER_ERROR",
+        category=ErrorCategory.SERVER_ERROR,
+    )
+    REQUEST_TIMEOUT_ERROR = ErrorCode(
+        value="REQUEST_TIMEOUT_ERROR",
+        category=ErrorCategory.SERVER_ERROR,
+    )
+    REQUEST_FAILED_ERROR = ErrorCode(
+        value="REQUEST_FAILED_ERROR",
+        category=ErrorCategory.SERVER_ERROR,
     )
 
     @classmethod

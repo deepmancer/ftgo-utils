@@ -14,7 +14,7 @@ class Gender(str, Enum):
 
 class ResponseStatus(str, Enum):
     SUCCESS = 'success'
-    FAILIURE = 'failiure'
+    FAILURE = 'failure'
     ERROR = 'error'
 
 class OrderStatus(str, Enum):

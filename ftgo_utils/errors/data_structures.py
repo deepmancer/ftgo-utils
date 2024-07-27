@@ -4,7 +4,6 @@ from typing import Optional, Union
 
 from pydantic import BaseModel, Field, field_validator
 
-
 class ErrorCategory(str, Enum):
     CLIENT_ERROR = 'client_error'
     SERVER_ERROR = 'server_error'
@@ -15,6 +14,7 @@ class ErrorCategory(str, Enum):
     CACHE_ERROR = 'cache_error'
     RABBITMQ_ERROR = 'rabbitmq_error'
     NETWORK_ERROR = 'network_error'
+    CONNECTION_ERROR = 'connection_error'
     RESOURCE_LIMIT_ERROR = 'resource_limit_error'
     GENERIC_ERROR = 'generic_error'
 

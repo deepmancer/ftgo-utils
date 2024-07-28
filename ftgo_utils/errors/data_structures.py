@@ -13,6 +13,13 @@ class ErrorCategory:
     def __repr__(self) -> str:
         return self.value
 
+    def __eq__(self, other) -> bool:
+        if isinstance(other, ErrorCategory):
+            return self.value == other.value
+        if isinstance(other, str):
+            return self.value == other
+        return False
+
 class ErrorCode:
     def __init__(
         self,

@@ -46,13 +46,18 @@ def format_record(record: dict) -> str:
     return format_string
 
 def init_logging(level: Union[int, str] = logging.INFO):
+    logger.remove()
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(level=level)
+    
     intercept_handler = InterceptHandler()
     logging.basicConfig(handlers=[intercept_handler], level=level, force=True)
 
     uvicorn_loggers = (
         logging.getLogger(name)
         for name in logging.root.manager.loggerDict
-        if name.startswith("uvicorn.")
+        if name.startswith("uvicorn.") or True
     )
 
     for uvicorn_logger in uvicorn_loggers:

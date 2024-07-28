@@ -46,3 +46,7 @@ class DriverStatus(str, Enum):
 class DriverAvailabilityStatus(str, Enum):
     AVAILABLE = 'available'
     OCCUPIED = 'occupied'
+
+class Languages(str, Enum):
+    EN = 'en'
+    FA = 'fa'

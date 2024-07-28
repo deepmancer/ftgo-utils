@@ -1,32 +1,29 @@
 import json
-from enum import Enum
+from dataclasses import dataclass
 from typing import Optional, Union
 
-class ErrorCategory(str, Enum):
-    CLIENT_ERROR = 'client_error'
-    SERVER_ERROR = 'server_error'
-    DOMAIN_ERROR = 'domain_error'
-    MESSAGE_BROKER_ERROR = 'message_broker_error'
-    VALIDATION_ERROR = 'validation_error'
-    DATABASE_ERROR = 'database_error'
-    CACHE_ERROR = 'cache_error'
-    RABBITMQ_ERROR = 'rabbitmq_error'
-    NETWORK_ERROR = 'network_error'
-    CONNECTION_ERROR = 'connection_error'
-    RESOURCE_LIMIT_ERROR = 'resource_limit_error'
-    GENERIC_ERROR = 'generic_error'
+@dataclass(frozen=True)
+class ErrorCategory:
+    value: str
+    status_code: Optional[int] = 500
+
+    def __str__(self) -> str:
+        return self.value
+
+    def __repr__(self) -> str:
+        return self.value
 
 class ErrorCode:
     def __init__(
         self,
         value: str,
-        category: Optional[Union[ErrorCategory, str]] = ErrorCategory.GENERIC_ERROR,
+        category: Optional[Union[ErrorCategory, str]] = ErrorCategory("UNKNOWN_ERROR"),
         status_code: Optional[int] = None,
         description: Optional[str] = None,
     ):
         self._value = value
         self._category = category.value if isinstance(category, ErrorCategory) else str(category)
-        self._status_code = status_code
+        self._status_code = status_code if status_code is not None else category.status_code
         self._description = description
         
     @property
@@ -60,8 +57,5 @@ class ErrorCode:
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.to_json()})"
 
-    def toJSON(self) -> str:
-        return json.dumps(self.to_dict(), indent=4, default=str)
-    
     def to_json(self) -> str:
-        return self.toJSON()
+        return json.dumps(self.to_dict())

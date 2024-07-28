@@ -4,6 +4,7 @@ import uuid
 from typing import Any, Dict, Optional, Union
 
 from .data_structures import ErrorCode
+
 class BaseError(Exception):
     def __init__(
         self,
@@ -11,7 +12,7 @@ class BaseError(Exception):
         payload: Optional[Dict[str, Any]] = None,
         message: Optional[str] = None,
         timestamp: Optional[Union[float, int]] = None,
-        source: Optional[str] = None,
+        issuer: Optional[str] = None,
         **kwargs
     ):
         super().__init__(message or error_code.to_json())
@@ -20,7 +21,7 @@ class BaseError(Exception):
         self.payload = payload or {}
         self.message = message
         self.timestamp = int(timestamp) if timestamp is not None else int(time.time())
-        self.source = source
+        self.issuer = issuer
 
     def __str__(self) -> str:
         return self.to_json()
@@ -35,7 +36,7 @@ class BaseError(Exception):
             "message": self.message,
             "payload": self.payload,
             "timestamp": self.timestamp,
-            "source": self.source,
+            "issuer": self.issuer,
         }
         return {k: v for k, v in error_details.items() if v is not None}
 

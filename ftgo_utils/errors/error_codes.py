@@ -1,524 +1,841 @@
+import json
+from typing import Optional, Union
 
-from .data_structures import ErrorCode, ErrorCategory
+from .data_structures import ErrorCategory, ErrorCode
+
+class ErrorCategories:
+    UNKNOWN_ERROR = ErrorCategory(
+        value='UNKNOWN_ERROR',
+        status_code=500,
+    )
+    BUSINESS_LOGIC_ERROR = ErrorCategory(
+        value='BUSINESS_LOGIC_ERROR',
+        status_code=400,
+    )
+    IO_ERROR = ErrorCategory(
+        value='IO_ERROR',
+        status_code=500,
+    )
+
+    @classmethod
+    def get_error_category(cls, error_category: str) -> ErrorCategory:
+        return getattr(cls, error_category.upper(), cls.UNKNOWN_ERROR)
+
+class ErrorCode:
+    def __init__(
+        self,
+        value: str,
+        category: ErrorCategory,
+        status_code: Optional[int] = None,
+        description: Optional[str] = None,
+    ):
+        category_str = str(category)
+        self._value = value
+        self._category = category
+        self._status_code = status_code or category.status_code
+        self._description = description
+        
+    @property
+    def value(self) -> str:
+        return self._value
+    
+    @property
+    def category(self) -> str:
+        return self._category
+    
+    @property
+    def status_code(self) -> Optional[int]:
+        return self._status_code
+    
+    @property
+    def description(self) -> Optional[str]:
+        return self._description
+
+    def to_dict(self) -> dict:
+        error_code_details = {
+            "value": self.value,
+            "category": self.category,
+            "status_code": self.status_code,
+            "description": self.description,
+        }
+        return {k: v for k, v in error_code_details.items() if v is not None}
+
+    def __str__(self) -> str:
+        return self.to_json()
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.to_json()})"
+
+    def toJSON(self) -> str:
+        return json.dumps(self.to_dict(), indent=4, default=str)
+    
+    def to_json(self) -> str:
+        return self.toJSON()
 
 class ErrorCodes:
     UNKNOWN_ERROR = ErrorCode(
         value="UNKNOWN_ERROR",
-        category=ErrorCategory.GENERIC_ERROR,
+        category=ErrorCategories.UNKNOWN_ERROR,
+        description="An unknown error has occurred.",
     )
     # Field Validation Errors
     MISSING_PHONE_NUMBER_ERROR = ErrorCode(
         value="MISSING_PHONE_NUMBER_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Phone number is missing.",
     )
     INVALID_PHONE_NUMBER_ERROR = ErrorCode(
         value="INVALID_PHONE_NUMBER_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Phone number is invalid.",
     )
     MISSING_NATIONAL_ID_ERROR = ErrorCode(
         value="MISSING_NATIONAL_ID_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="National ID is missing.",
     )
     INVALID_NATIONAL_ID_ERROR = ErrorCode(
         value="INVALID_NATIONAL_ID_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="National ID is invalid.",
     )
     MISSING_PASSWORD_ERROR = ErrorCode(
         value="MISSING_PASSWORD_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Password is missing.",
     )
     INVALID_PASSWORD_ERROR = ErrorCode(
         value="INVALID_PASSWORD_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Password is invalid.",
     )
     MISSING_ROLE_ERROR = ErrorCode(
         value="MISSING_ROLE_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Role is missing.",
     )
     INVALID_ROLE_ERROR = ErrorCode(
         value="INVALID_ROLE_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Role is invalid.",
     )
     MISSING_EMAIL_ERROR = ErrorCode(
         value="MISSING_EMAIL_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Email is missing.",
     )
     INVALID_EMAIL_ERROR = ErrorCode(
         value="INVALID_EMAIL_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Email is invalid.",
     )
 
     # Address CRUD
     ADDRESS_NOT_FOUND_ERROR = ErrorCode(
         value="ADDRESS_NOT_FOUND_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Address not found.",
     )
     UPDATE_ADDRESS_ERROR = ErrorCode(
         value="UPDATE_ADDRESS_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to update address.",
     )
     GET_ADDRESS_ERROR = ErrorCode(
         value="GET_ADDRESS_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to retrieve address.",
     )
     GET_ADDRESS_INFO_ERROR = ErrorCode(
         value="GET_ADDRESS_INFO_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to retrieve address information.",
     )
     GET_ADDRESSES_ERROR = ErrorCode(
         value="GET_ADDRESSES_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to retrieve addresses.",
     )
     ADD_ADDRESS_ERROR = ErrorCode(
         value="ADD_ADDRESS_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to add address.",
     )
     DELETE_ADDRESS_ERROR = ErrorCode(
         value="DELETE_ADDRESS_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to delete address.",
     )
     SET_ADDRESS_AS_DEFAULT_ERROR = ErrorCode(
         value="SET_ADDRESS_AS_DEFAULT_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to set address as default.",
     )
     UNSET_ADDRESS_AS_DEFAULT_ERROR = ErrorCode(
         value="UNSET_ADDRESS_AS_DEFAULT_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to unset address as default.",
     )
     DEFAULT_ADDRESS_DELETION_ERROR = ErrorCode(
         value="DEFAULT_ADDRESS_DELETION_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Cannot delete the default address.",
     )
     ADDRESS_VALIDATION_ERROR = ErrorCode(
         value="ADDRESS_VALIDATION_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Address validation failed.",
     )
     ADDRESS_PERMISSION_DENIED_ERROR = ErrorCode(
         value="ADDRESS_PERMISSION_DENIED_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=403,
+        description="Permission denied for address operation.",
     )
     DUPLICATE_ADDRESS_ERROR = ErrorCode(
         value="DUPLICATE_ADDRESS_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=409,
+        description="Address already exists.",
     )
     LOAD_ADDRESS_ERROR = ErrorCode(
         value="LOAD_ADDRESS_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to load address.",
     )
     BATCH_LOAD_ADDRESS_ERROR = ErrorCode(
         value="BATCH_LOAD_ADDRESS_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to load addresses in batch.",
     )
     DEFAULT_ADDRESS_NOT_FOUND_ERROR = ErrorCode(
         value="DEFAULT_ADDRESS_NOT_FOUND_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Default address not found.",
     )
 
     # User CRUD Errors
     USER_REGISTRATION_ERROR = ErrorCode(
         value="USER_REGISTRATION_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to register user.",
     )
     USER_PROFILE_UPDATE_ERROR = ErrorCode(
         value="USER_PROFILE_UPDATE_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to update user profile.",
     )
     USER_LOGIN_ERROR = ErrorCode(
         value="USER_LOGIN_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to login user.",
     )
     USER_DELETE_ACCOUNT_ERROR = ErrorCode(
         value="USER_DELETE_ACCOUNT_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to delete user account.",
     )
     USER_VERIFICATION_ERROR = ErrorCode(
         value="USER_VERIFICATION_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="User verification failed.",
     )
     USER_LOGOUT_ERROR = ErrorCode(
         value="USER_LOGOUT_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to logout user.",
     )
     USER_LOAD_ACCOUNT_ERROR = ErrorCode(
         value="USER_LOAD_ACCOUNT_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to load user account.",
     )
     USER_NOT_FOUND_ERROR = ErrorCode(
         value="USER_NOT_FOUND_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="User not found.",
     )
     USER_NOT_VERIFIED_ERROR = ErrorCode(
         value="USER_NOT_VERIFIED_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="User not verified.",
     )
     ACCOUNT_EXISTS_ERROR = ErrorCode(
         value="ACCOUNT_EXISTS_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=409,
+        description="Account already exists.",
     )
     INVALID_AUTHENTICATION_CODE_ERROR = ErrorCode(
         value="INVALID_AUTHENTICATION_CODE_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Invalid authentication code.",
     )
     WRONG_AUTHENTICATION_CODE_ERROR = ErrorCode(
         value="WRONG_AUTHENTICATION_CODE_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Wrong authentication code.",
     )
     WRONG_PASSWORD_ERROR = ErrorCode(
         value="WRONG_PASSWORD_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Wrong password.",
     )
     RESENDING_AUTHENTICATION_CODE_ERROR = ErrorCode(
         value="RESENDING_AUTHENTICATION_CODE_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to resend authentication code.",
     )
     USER_ALREADY_VERIFIED_ERROR = ErrorCode(
         value="USER_ALREADY_VERIFIED_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="User already verified.",
     )
     USER_LOCKED_OUT_ERROR = ErrorCode(
         value="USER_LOCKED_OUT_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=403,
+        description="User is locked out.",
     )
     USER_SESSION_EXPIRED_ERROR = ErrorCode(
         value="USER_SESSION_EXPIRED_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=403,
+        description="User session has expired.",
     )
     USER_PERMISSION_DENIED_ERROR = ErrorCode(
         value="USER_PERMISSION_DENIED_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=403,
+        description="Permission denied for user operation.",
     )
     USER_PASSWORD_RESET_ERROR = ErrorCode(
         value="USER_PASSWORD_RESET_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to reset user password.",
     )
     USER_PASSWORD_EXPIRED_ERROR = ErrorCode(
         value="USER_PASSWORD_EXPIRED_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="User password has expired.",
     )
     USER_DUPLICATE_EMAIL_ERROR = ErrorCode(
         value="USER_DUPLICATE_EMAIL_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=409,
+        description="Email already exists.",
     )
     USER_EMAIL_NOT_FOUND_ERROR = ErrorCode(
         value="USER_EMAIL_NOT_FOUND_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Email not found.",
     )
     USER_SERVICE_UNAVAILABLE_ERROR = ErrorCode(
         value="USER_SERVICE_UNAVAILABLE_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=503,
+        description="User service is unavailable.",
     )
 
     # DB Errors
     DB_CONNECTION_ERROR = ErrorCode(
         value="DB_CONNECTION_ERROR",
-        category=ErrorCategory.CONNECTION_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database connection error.",
     )
     DB_TRANSACTION_ERROR = ErrorCode(
         value="DB_TRANSACTION_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database transaction error.",
     )
     DB_SESSION_CREATION_ERROR = ErrorCode(
         value="DB_SESSION_CREATION_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database session creation error.",
     )
     DB_INSERT_ERROR = ErrorCode(
         value="DB_INSERT_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database insert error.",
     )
     DB_FETCH_ERROR = ErrorCode(
         value="DB_FETCH_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database fetch error.",
     )
     DB_UPDATE_ERROR = ErrorCode(
         value="DB_UPDATE_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database update error.",
     )
     DB_JOIN_ERROR = ErrorCode(
         value="DB_JOIN_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database join error.",
     )
     DB_DELETE_ERROR = ErrorCode(
         value="DB_DELETE_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database delete error.",
     )
     DB_DUPLICATE_ENTRY_ERROR = ErrorCode(
         value="DB_DUPLICATE_ENTRY_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=409,
+        description="Duplicate database entry.",
     )
     DB_CONSTRAINT_VIOLATION_ERROR = ErrorCode(
         value="DB_CONSTRAINT_VIOLATION_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Database constraint violation.",
     )
     DB_TIMEOUT_ERROR = ErrorCode(
         value="DB_TIMEOUT_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Database timeout error.",
     )
     DB_INVALID_QUERY_ERROR = ErrorCode(
         value="DB_INVALID_QUERY_ERROR",
-        category=ErrorCategory.DATABASE_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Invalid database query.",
     )
 
     # Cache Errors
     CACHE_CONNECTION_ERROR = ErrorCode(
         value="CACHE_CONNECTION_ERROR",
-        category=ErrorCategory.CONNECTION_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache connection error.",
     )
     CACHE_TRANSACTION_ERROR = ErrorCode(
         value="CACHE_TRANSACTION_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache transaction error.",
     )
     CACHE_SESSION_CREATION_ERROR = ErrorCode(
         value="CACHE_SESSION_CREATION_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache session creation error.",
     )
     CACHE_FETCH_ERROR = ErrorCode(
         value="CACHE_FETCH_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache fetch error.",
     )
     CACHE_INSERT_ERROR = ErrorCode(
         value="CACHE_INSERT_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache insert error.",
     )
     CACHE_DELETE_ERROR = ErrorCode(
         value="CACHE_DELETE_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache delete error.",
     )
     CACHE_EXPIRE_ERROR = ErrorCode(
         value="CACHE_EXPIRE_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache expire error.",
     )
     CACHE_PIPELINE_ERROR = ErrorCode(
         value="CACHE_PIPELINE_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache pipeline error.",
     )
     CACHE_FLUSH_ERROR = ErrorCode(
         value="CACHE_FLUSH_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache flush error.",
     )
     CACHE_KEY_NOT_FOUND_ERROR = ErrorCode(
         value="CACHE_KEY_NOT_FOUND_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Cache key not found.",
     )
     CACHE_TIMEOUT_ERROR = ErrorCode(
         value="CACHE_TIMEOUT_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Cache timeout error.",
     )
     CACHE_INVALID_COMMAND_ERROR = ErrorCode(
         value="CACHE_INVALID_COMMAND_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Invalid cache command.",
     )
     CACHE_AUTHENTICATION_ERROR = ErrorCode(
         value="CACHE_AUTHENTICATION_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=401,
+        description="Cache authentication error.",
     )
 
     # Message Broker Errors
     RABBITMQ_CONNECTION_ERROR = ErrorCode(
         value="RABBITMQ_CONNECTION_ERROR",
-        category=ErrorCategory.CONNECTION_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ connection error.",
     )
     RABBITMQ_CHANNEL_ERROR = ErrorCode(
         value="RABBITMQ_CHANNEL_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ channel error.",
     )
     RABBITMQ_EXCHANGE_ERROR = ErrorCode(
         value="RABBITMQ_EXCHANGE_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ exchange error.",
     )
     RABBITMQ_QUEUE_ERROR = ErrorCode(
         value="RABBITMQ_QUEUE_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ queue error.",
     )
     RABBITMQ_PUBLISH_ERROR = ErrorCode(
         value="RABBITMQ_PUBLISH_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ publish error.",
     )
     RABBITMQ_CONSUME_ERROR = ErrorCode(
         value="RABBITMQ_CONSUME_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ consume error.",
     )
     RABBITMQ_ACK_ERROR = ErrorCode(
         value="RABBITMQ_ACK_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ acknowledgment error.",
     )
     RABBITMQ_NACK_ERROR = ErrorCode(
         value="RABBITMQ_NACK_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ negative acknowledgment error.",
     )
     RABBITMQ_RPC_ERROR = ErrorCode(
         value="RABBITMQ_RPC_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ RPC error.",
     )
     RABBITMQ_TIMEOUT_ERROR = ErrorCode(
         value="RABBITMQ_TIMEOUT_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="RabbitMQ timeout error.",
     )
     RABBITMQ_AUTHENTICATION_ERROR = ErrorCode(
         value="RABBITMQ_AUTHENTICATION_ERROR",
-        category=ErrorCategory.RABBITMQ_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=401,
+        description="RabbitMQ authentication error.",
     )
 
     # Event Errors
     EVENT_CONNECTION_ERROR = ErrorCode(
         value="EVENT_CONNECTION_ERROR",
-        category=ErrorCategory.NETWORK_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event connection error.",
     )
     EVENT_PUBLISH_ERROR = ErrorCode(
         value="EVENT_PUBLISH_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event publish error.",
     )
     EVENT_CONSUME_ERROR = ErrorCode(
         value="EVENT_CONSUME_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event consume error.",
     )
     EVENT_TIMEOUT_ERROR = ErrorCode(
         value="EVENT_TIMEOUT_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event timeout error.",
     )
     EVENT_HANDLER_ERROR = ErrorCode(
         value="EVENT_HANDLER_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event handler error.",
     )
     EVENT_ACK_ERROR = ErrorCode(
         value="EVENT_ACK_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event acknowledgment error.",
     )
     EVENT_NACK_ERROR = ErrorCode(
         value="EVENT_NACK_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event negative acknowledgment error.",
     )
     EVENT_PROCESSING_ERROR = ErrorCode(
         value="EVENT_PROCESSING_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event processing error.",
     )
-    EVENT_REGISTERATION_ERROR = ErrorCode(
-        value="EVENT_REGISTERATION_ERROR",
-        category=ErrorCategory.MESSAGE_BROKER_ERROR,
+    EVENT_REGISTRATION_ERROR = ErrorCode(
+        value="EVENT_REGISTRATION_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Event registration error.",
     )
 
     # API Errors
     SERVER_CONNECTION_ERROR = ErrorCode(
         value="SERVER_CONNECTION_ERROR",
-        category=ErrorCategory.NETWORK_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Server connection error.",
     )
     SERVER_TIMEOUT_ERROR = ErrorCode(
         value="SERVER_TIMEOUT_ERROR",
-        category=ErrorCategory.NETWORK_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Server timeout error.",
     )
     SERVER_AUTHENTICATION_ERROR = ErrorCode(
         value="SERVER_AUTHENTICATION_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=401,
+        description="Server authentication error.",
     )
     SERVER_AUTHORIZATION_ERROR = ErrorCode(
         value="SERVER_AUTHORIZATION_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=403,
+        description="Server authorization error.",
     )
     SERVER_NOT_FOUND_ERROR = ErrorCode(
         value="SERVER_NOT_FOUND_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Server not found.",
     )
     SERVER_METHOD_NOT_ALLOWED_ERROR = ErrorCode(
         value="SERVER_METHOD_NOT_ALLOWED_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=405,
+        description="Server method not allowed.",
     )
     SERVER_PAYLOAD_TOO_LARGE_ERROR = ErrorCode(
         value="SERVER_PAYLOAD_TOO_LARGE_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=413,
+        description="Server payload too large.",
     )
     SERVER_UNSUPPORTED_MEDIA_TYPE_ERROR = ErrorCode(
         value="SERVER_UNSUPPORTED_MEDIA_TYPE_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=415,
+        description="Server unsupported media type.",
     )
     SERVER_VALIDATION_ERROR = ErrorCode(
         value="SERVER_VALIDATION_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Server validation error.",
     )
     SERVER_SERVER_ERROR = ErrorCode(
         value="SERVER_SERVER_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Internal server error.",
     )
     SERVER_SERVICE_UNAVAILABLE_ERROR = ErrorCode(
         value="SERVER_SERVICE_UNAVAILABLE_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=503,
+        description="Server service unavailable.",
     )
     SERVER_RATE_LIMIT_ERROR = ErrorCode(
         value="SERVER_RATE_LIMIT_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=429,
+        description="Server rate limit exceeded.",
     )
     MISSING_AUTHORIZATION_HEADER_ERROR = ErrorCode(
         value="MISSING_AUTHORIZATION_HEADER_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=401,
+        description="Missing authorization header.",
     )
     INVALID_AUTHORIZATION_HEADER_ERROR = ErrorCode(
         value="INVALID_AUTHORIZATION_HEADER_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=401,
+        description="Invalid authorization header.",
     )
     INVALID_AUTHORIZATION_SCHEME_ERROR = ErrorCode(
         value="INVALID_AUTHORIZATION_SCHEME_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=401,
+        description="Invalid authorization scheme.",
     )
     INVALID_TOKEN_ERROR = ErrorCode(
         value="INVALID_TOKEN_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=401,
+        description="Invalid token.",
     )
     TOKEN_NOT_FOUND_ERROR = ErrorCode(
         value="TOKEN_NOT_FOUND_ERROR",
-        category=ErrorCategory.CACHE_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Token not found.",
     )
     IDENTITY_MISMATCH_ERROR = ErrorCode(
         value="IDENTITY_MISMATCH_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=401,
+        description="Identity mismatch.",
     )
     INTERNAL_AUTHENTICATION_ERROR = ErrorCode(
         value="INTERNAL_AUTHENTICATION_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Internal authentication error.",
     )
 
     # Driver Errors
     VEHICLE_SUBMISSION_ERROR = ErrorCode(
         value="VEHICLE_SUBMISSION_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Vehicle submission error.",
     )
     VEHICLE_GET_ERROR = ErrorCode(
         value="VEHICLE_GET_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to retrieve vehicle.",
     )
     VEHICLE_REMOVE_ERROR = ErrorCode(
         value="VEHICLE_REMOVE_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to remove vehicle.",
     )
     VEHICLE_MODIFY_ERROR = ErrorCode(
         value="VEHICLE_MODIFY_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to modify vehicle.",
     )
     VEHICLE_NOT_FOUND_ERROR = ErrorCode(
         value="VEHICLE_NOT_FOUND_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Vehicle not found.",
     )
     VEHICLE_PERMISSION_DENIED_ERROR = ErrorCode(
         value="VEHICLE_PERMISSION_DENIED_ERROR",
-        category=ErrorCategory.DOMAIN_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=403,
+        description="Permission denied for vehicle operation.",
     )
     VEHICLE_VALIDATION_ERROR = ErrorCode(
         value="VEHICLE_VALIDATION_ERROR",
-        category=ErrorCategory.VALIDATION_ERROR,
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Vehicle validation failed.",
     )
-    
     INTERNAL_SERVER_ERROR = ErrorCode(
         value="INTERNAL_SERVER_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Internal server error.",
     )
     REQUEST_TIMEOUT_ERROR = ErrorCode(
         value="REQUEST_TIMEOUT_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Request timeout error.",
     )
     REQUEST_FAILED_ERROR = ErrorCode(
         value="REQUEST_FAILED_ERROR",
-        category=ErrorCategory.SERVER_ERROR,
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Request failed error.",
     )
 
     @classmethod
     def get_error_code(cls, error_code: str) -> ErrorCode:
-        return getattr(cls, error_code, cls.UNKNOWN_ERROR)
+        return getattr(cls, error_code.upper(), cls.UNKNOWN_ERROR)
 
-__all__ = ["ErrorCodes"]
+__all__ = ["ErrorCodes", "ErrorCategories"]

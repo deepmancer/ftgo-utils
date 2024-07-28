@@ -31,17 +31,17 @@ def format_record(record: dict) -> str:
             if binding_key.startswith("custom_bind_"):
                 format_string += f"<blue><b>{binding_key[12:].upper()}: {binding_value!r}</b></blue> | "
 
-    format_string += "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+    format_string += "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>\n"
 
     if record.get('exception', None) is not None:
-        format_string += "\n{exception}"
+        format_string += "{exception}\n"
 
     if "payload" in record["extra"]:
         try:
             record["extra"]["payload"] = json.dumps(record["extra"]["payload"], indent=4, default=str)
-            format_string += "\n<level>Payload: {extra[payload]}</level>"
+            format_string += "<level>Payload: {extra[payload]}</level>\n"
         except (TypeError, OverflowError) as e:
-            format_string += f"\n<level>Payload could not be serialized: {e}</level>"
+            format_string += f"<level>Payload could not be serialized: {e}</level>\n"
 
     return format_string
 

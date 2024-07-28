@@ -33,15 +33,15 @@ def format_record(record: dict) -> str:
 
     format_string += "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
 
+    if record.get('exception', None) is not None:
+        format_string += "\n{exception}"
+
     if "payload" in record["extra"]:
         try:
             record["extra"]["payload"] = json.dumps(record["extra"]["payload"], indent=4, default=str)
             format_string += "\n<level>Payload: {extra[payload]}</level>"
         except (TypeError, OverflowError) as e:
             format_string += f"\n<level>Payload could not be serialized: {e}</level>"
-
-    if record.get('exception', None) is not None:
-        format_string += "\n{exception}"
 
     return format_string
 

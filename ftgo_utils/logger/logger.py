@@ -1,9 +1,7 @@
 import json
 import logging
 import sys
-import pickle
-import base64   
-from typing import Optional, Union
+from typing import Union
 from loguru import logger
 
 class InterceptHandler(logging.Handler):
@@ -39,7 +37,7 @@ def format_record(record: dict) -> str:
         try:
             record["extra"]["payload"] = json.dumps(record["extra"]["payload"], indent=4, default=str)
             format_string += "\n<level>Payload: {extra[payload]}</level>"
-        except pickle.PickleError as e:
+        except (TypeError, OverflowError) as e:
             format_string += f"\n<level>Payload could not be serialized: {e}</level>"
 
     if record.get('exception', None) is not None:
@@ -48,27 +46,18 @@ def format_record(record: dict) -> str:
     return format_string
 
 def init_logging(level: Union[int, str] = logging.INFO):
-    import logging
-    from loguru import logger
+    intercept_handler = InterceptHandler()
+    logging.basicConfig(handlers=[intercept_handler], level=level, force=True)
 
-    loggers = (
+    uvicorn_loggers = (
         logging.getLogger(name)
         for name in logging.root.manager.loggerDict
+        if name.startswith("uvicorn.")
     )
-    for uvicorn_logger in loggers:
-        uvicorn_logger.handlers = []
 
-    intercept_handler = InterceptHandler()
-    logging.getLogger("uvicorn").handlers = [intercept_handler]
-    logging.getLogger("uvicorn.access").handlers = [intercept_handler]
-    logging.getLogger("uvicorn.error").handlers = [intercept_handler]
-    logging.getLogger("uvicorn.asgi").handlers = [intercept_handler]
-    logging.getLogger("uvicorn.error").handlers = [intercept_handler]
-    
-    # setup the intercept handler as the whole root logger's handler
-    logging.root.handlers = [intercept_handler]
-    logging.basicConfig(handlers=[InterceptHandler()], level=level, encoding="utf-8", force=True)
-    
+    for uvicorn_logger in uvicorn_loggers:
+        uvicorn_logger.handlers = [intercept_handler]
+
     logger.configure(
         handlers=[
             {"sink": sys.stdout, "level": level, "colorize": True, "format": format_record},
@@ -77,8 +66,6 @@ def init_logging(level: Union[int, str] = logging.INFO):
     )
 
 def get_logger(**binding_params):
-    from loguru import logger
-
     if not binding_params:
         return logger
     return logger.bind(**{f"custom_bind_{k}": v for k, v in binding_params.items()})

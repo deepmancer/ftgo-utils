@@ -66,7 +66,6 @@ def init_logging(level: Union[int, str] = logging.INFO):
     logger.configure(
         handlers=[
             {"sink": sys.stdout, "level": level, "colorize": True, "format": format_record},
-            {"sink": "logfile.log", "level": level, "format": format_record, "enqueue": True},
         ]
     )
 

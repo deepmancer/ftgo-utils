@@ -783,6 +783,49 @@ class ErrorCodes:
         description="Request failed error.",
     )
 
+    # Location service
+    DRIVER_STATUS_LOAD_ERROR = ErrorCode(
+        value="DRIVER_STATUS_LOAD_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to load driver's status.",
+    )
+    DRIVER_CHANGE_STATUS_ERROR = ErrorCode(
+        value="DRIVER_CHANGE_STATUS_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to change driver status.",
+    )
+    GET_NEAREST_DRIVERS_ERROR = ErrorCode(
+        value="GET_NEAREST_DRIVERS_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to retrieve nearest drivers.",
+    )
+    INVALID_LOCATION_ERROR = ErrorCode(
+        value="INVALID_LOCATION_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Provided location is invalid.",
+    )
+    LOCATION_SAVE_ERROR = ErrorCode(
+        value="LOCATION_SAVE_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to save location.",
+    )
+    LOCATION_LOAD_ERROR = ErrorCode(
+        value="LOCATION_LOAD_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to load location.",
+    )
+    LOCATION_DELETE_ERROR = ErrorCode(
+        value="LOCATION_DELETE_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to delete location.",
+    )
     @classmethod
     def get_error_code(cls, error_code: str) -> ErrorCode:
         return getattr(cls, error_code.upper(), cls.UNKNOWN_ERROR)

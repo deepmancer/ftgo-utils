@@ -21,57 +21,6 @@ class ErrorCategories:
     def get_error_category(cls, error_category: str) -> ErrorCategory:
         return getattr(cls, error_category.upper(), cls.UNKNOWN_ERROR)
 
-class ErrorCode:
-    def __init__(
-        self,
-        value: str,
-        category: ErrorCategory,
-        status_code: Optional[int] = None,
-        description: Optional[str] = None,
-    ):
-        category_str = str(category)
-        self._value = value
-        self._category = category
-        self._status_code = status_code or category.status_code
-        self._description = description
-        
-    @property
-    def value(self) -> str:
-        return self._value
-    
-    @property
-    def category(self) -> str:
-        return self._category
-    
-    @property
-    def status_code(self) -> Optional[int]:
-        return self._status_code
-    
-    @property
-    def description(self) -> Optional[str]:
-        return self._description
-
-    def to_dict(self) -> dict:
-        error_code_details = {
-            "value": self.value,
-            "category": self.category,
-            "status_code": self.status_code,
-            "description": self.description,
-        }
-        return {k: v for k, v in error_code_details.items() if v is not None}
-
-    def __str__(self) -> str:
-        return self.to_json()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.to_json()})"
-
-    def toJSON(self) -> str:
-        return json.dumps(self.to_dict(), indent=4, default=str)
-    
-    def to_json(self) -> str:
-        return self.toJSON()
-
 class ErrorCodes:
     UNKNOWN_ERROR = ErrorCode(
         value="UNKNOWN_ERROR",

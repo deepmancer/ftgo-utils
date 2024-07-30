@@ -35,7 +35,7 @@ class Provinces:
     @staticmethod
     def values() -> Iterable[str]:
         for key, value in Provinces.__dict__.items():
-            if not key.startswith("__") and not callable(value):
+            if not key.startswith("__") and not callable(value) and isinstance(value, str):
                 yield value
 
 class ProvinceBoundaries:

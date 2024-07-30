@@ -1,5 +1,5 @@
 import h3
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple, Any
 
 from ..constants import ProvinceBoundaries, Provinces
 

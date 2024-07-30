@@ -22,9 +22,9 @@ def get_hexagon_id(lat: float, lng: float, resolution: int) -> str:
     return h3.geo_to_h3(lat, lng, resolution)
 
 def get_hexagon_neighbors(hex_id: str, radius: int) -> List[str]:
-    return h3.k_ring(hex_id, radius)
+    return list(h3.k_ring(hex_id, radius))
 
-def get_province(lat: float, lng: float, return_closest: Optional[bool] = False) -> Optional[str]:
+def get_province(lat: float, lng: float, return_closest: Optional[bool] = True) -> Optional[str]:
     location_hexagon = get_hexagon_id(lat, lng, 8)
 
     for province, province_hexagons in PROVINCE_HEXAGONS.items():

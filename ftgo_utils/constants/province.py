@@ -34,9 +34,12 @@ class Provinces:
 
     @staticmethod
     def values() -> Iterable[str]:
-        return (value for key, value in Provinces.__dict__.items() if not key.startswith("__") and not callable(value))
+        for key, value in Provinces.__dict__.items():
+            if not key.startswith("__") and not callable(value):
+                yield value
 
 class ProvinceBoundaries:
+    # Assuming _TEHRAN_POLYGON, _KARAJ_POLYGON, etc., are defined elsewhere in the code.
     TEHRAN = _TEHRAN_POLYGON
     KARAJ = _KARAJ_POLYGON
     ISFAHAN = _ISFAHAN_POLYGON
@@ -45,6 +48,8 @@ class ProvinceBoundaries:
 
     @staticmethod
     def items() -> Iterable[Tuple[str, Dict[str, Any]]]:
-        return ((key, getattr(ProvinceBoundaries, key)) for key in Provinces.values())
+        keys = list(Provinces.values())
+        for key in keys:
+            yield key, getattr(ProvinceBoundaries, key)
 
 __all__ = ['Provinces', 'ProvinceBoundaries']

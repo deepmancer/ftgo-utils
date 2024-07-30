@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ftgo_utils",
-    version="1.10.0",
+    version="1.11.0",
     description="Shared utilities for FTGO platform",
     author="Alireza Heidari",
     author_email="alirezaheidari.cs@gmail.com",
@@ -14,6 +14,8 @@ setup(
         "bcrypt",
         "colorama",
         "dataclasses",
+        "geojson",
+        "h3",
         "httpx",
         "loguru",
         "passlib",

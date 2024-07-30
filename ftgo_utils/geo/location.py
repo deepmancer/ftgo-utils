@@ -5,7 +5,7 @@ from ..constants import ProvinceBoundaries, Provinces
 
 
 def calculate_centroid(boundaries: Dict[str, Any]) -> Tuple[float, float]:
-    coords = boundaries['coordinates'][0][0] if boundaries['type'] == 'Polygon' else boundaries['coordinates'][0][0][0]
+    coords = boundaries['coordinates'][0] if boundaries['type'] == 'Polygon' else []
     avg_lat = sum(coord[1] for coord in coords) / len(coords)
     avg_lng = sum(coord[0] for coord in coords) / len(coords)
     return avg_lat, avg_lng

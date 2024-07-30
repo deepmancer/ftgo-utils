@@ -826,6 +826,19 @@ class ErrorCodes:
         status_code=500,
         description="Failed to delete location.",
     )
+    LOCATION_CACHE_ERROR = ErrorCode(
+        value="LOCATION_CACHE_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Location cache error.",
+    )
+    LOCATION_NOT_FOUND_ERROR = ErrorCode(
+        value="LOCATION_NOT_FOUND_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Location not found.",
+    )
+
     @classmethod
     def get_error_code(cls, error_code: str) -> ErrorCode:
         return getattr(cls, error_code.upper(), cls.UNKNOWN_ERROR)

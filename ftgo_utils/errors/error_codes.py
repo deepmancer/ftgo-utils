@@ -200,6 +200,12 @@ class ErrorCodes:
         status_code=500,
         description="Failed to update user profile.",
     )
+    USER_LOAD_PROFILE_ERROR = ErrorCode(
+        value="USER_LOAD_PROFILE_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to load user profile.",
+    )
     USER_LOGIN_ERROR = ErrorCode(
         value="USER_LOGIN_ERROR",
         category=ErrorCategories.BUSINESS_LOGIC_ERROR,

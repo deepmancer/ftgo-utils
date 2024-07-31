@@ -254,6 +254,18 @@ class ErrorCodes:
         status_code=400,
         description="Invalid authentication code.",
     )
+    LOAD_AUTHENTICATION_CODE_ERROR = ErrorCode(
+        value="LOAD_AUTHENTICATION_CODE_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to load authentication code.",
+    )
+    GENERATE_AUTHENTICATION_CODE_ERROR = ErrorCode(
+        value="GENERATE_AUTHENTICATION_CODE_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to generate authentication code.",
+    )
     WRONG_AUTHENTICATION_CODE_ERROR = ErrorCode(
         value="WRONG_AUTHENTICATION_CODE_ERROR",
         category=ErrorCategories.BUSINESS_LOGIC_ERROR,
@@ -781,6 +793,12 @@ class ErrorCodes:
         category=ErrorCategories.IO_ERROR,
         status_code=500,
         description="Request failed error.",
+    )
+    VEHICLE_LOAD_ERROR = ErrorCode(
+        value="VEHICLE_LOAD_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to load vehicle.",
     )
 
     # Location service

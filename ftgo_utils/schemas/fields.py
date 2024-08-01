@@ -19,7 +19,7 @@ class PhoneNumberMixin(BaseSchema):
         return validate_phone_number(value)
 
 class RoleMixin(BaseSchema):
-    role: str = Field(..., min_length=1, max_length=10)
+    role: str = Field(..., min_length=1, max_length=20)
 
     @field_validator('role', mode='before')
     def validate_role_field(cls, value):

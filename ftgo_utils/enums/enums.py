@@ -21,23 +21,23 @@ class OrderStatus(str, Enum):
     PENDING = 'pending'
     CONFIRMED = 'confirmed'
     CANCELLED = 'cancelled'
+    READY_FOR_PICKUP = 'ready_for_pickup'
+    OUT_FOR_DELIVERY = 'out_for_delivery'
     DELIVERED = 'delivered'
     REJECTED = 'rejected'
-    READY_FOR_DELIVERY = 'ready_for_delivery'
-    IN_TRANSIT = 'in_transit'
-    
+
+class DeliveryStatus(str, Enum):
+    PENDING = 'pending'
+    ASSIGNED = 'assigned'
+    PICKED_UP = 'picked_up'
+    DELIVERED = 'delivered'
+    CANCELLED = 'cancelled'
+
 class PaymentStatus(str, Enum):
     PENDING = 'pending'
     PAID = 'paid'
     FAILED = 'failed'
     REFUNDED = 'refunded'
-
-class PaymentMode(str, Enum):
-    CASH = 'cash'
-    CARD = 'card'
-    UPI = 'upi'
-    NET_BANKING = 'net_banking'
-    WALLET = 'wallet'
 
 class DriverStatus(str, Enum):
     ONLINE = 'online'

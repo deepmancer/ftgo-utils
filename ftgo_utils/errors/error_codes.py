@@ -862,6 +862,127 @@ class ErrorCodes:
         status_code=404,
         description="Location not found.",
     )
+    # Delivery Errors
+    SAVE_DELIVERY_ERROR = ErrorCode(
+        value="SAVE_DELIVERY_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to save delivery document.",
+    )
+    UPDATE_DELIVERY_STATUS_ERROR = ErrorCode(
+        value="UPDATE_DELIVERY_STATUS_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to update delivery status.",
+    )
+    ASSIGN_DRIVER_ERROR = ErrorCode(
+        value="ASSIGN_DRIVER_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to assign driver.",
+    )
+    INVALID_DELIVERY_STATUS_ERROR = ErrorCode(
+        value="INVALID_DELIVERY_STATUS_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Invalid delivery status.",
+    )
+    UPDATE_DELIVERY_TIMESTAMP_ERROR = ErrorCode(
+        value="UPDATE_DELIVERY_TIMESTAMP_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to update delivery timestamps.",
+    )
+
+    # Order Item Errors
+    SAVE_ORDER_ITEM_ERROR = ErrorCode(
+        value="SAVE_ORDER_ITEM_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to save order item document.",
+    )
+    UPDATE_ORDER_ITEM_QUANTITY_ERROR = ErrorCode(
+        value="UPDATE_ORDER_ITEM_QUANTITY_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to update order item quantity.",
+    )
+    UPDATE_ORDER_ITEM_PRICE_ERROR = ErrorCode(
+        value="UPDATE_ORDER_ITEM_PRICE_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to update order item price.",
+    )
+    UPDATE_ORDER_ITEM_TIMESTAMP_ERROR = ErrorCode(
+        value="UPDATE_ORDER_ITEM_TIMESTAMP_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to update order item timestamps.",
+    )
+
+    # Order Status Errors
+    SAVE_ORDER_STATUS_ERROR = ErrorCode(
+        value="SAVE_ORDER_STATUS_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to save order status document.",
+    )
+
+    # Order Errors
+    SAVE_ORDER_ERROR = ErrorCode(
+        value="SAVE_ORDER_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to save order document.",
+    )
+    ADD_ORDER_ITEM_ERROR = ErrorCode(
+        value="ADD_ORDER_ITEM_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to add order item.",
+    )
+    REMOVE_ORDER_ITEM_ERROR = ErrorCode(
+        value="REMOVE_ORDER_ITEM_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to remove order item.",
+    )
+    CALCULATE_TOTAL_ERROR = ErrorCode(
+        value="CALCULATE_TOTAL_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to calculate order total.",
+    )
+    CHANGE_ORDER_STATUS_ERROR = ErrorCode(
+        value="CHANGE_ORDER_STATUS_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to change order status.",
+    )
+    PROCESS_PAYMENT_ERROR = ErrorCode(
+        value="PROCESS_PAYMENT_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to process payment.",
+    )
+    MARK_READY_FOR_PICKUP_ERROR = ErrorCode(
+        value="MARK_READY_FOR_PICKUP_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to mark order as ready for pickup.",
+    )
+    CANCEL_ORDER_ERROR = ErrorCode(
+        value="CANCEL_ORDER_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to cancel order.",
+    )
+    UPDATE_ORDER_TIMESTAMP_ERROR = ErrorCode(
+        value="UPDATE_ORDER_TIMESTAMP_ERROR",
+        category=ErrorCategories.IO_ERROR,
+        status_code=500,
+        description="Failed to update order timestamps.",
+    )
 
     @classmethod
     def get_error_code(cls, error_code: str) -> ErrorCode:

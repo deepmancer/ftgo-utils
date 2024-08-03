@@ -983,6 +983,88 @@ class ErrorCodes:
         status_code=500,
         description="Failed to update order timestamps.",
     )
+    SCHEDULE_DELIVERY_ERROR = ErrorCode(
+        value="SCHEDULE_DELIVERY_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=500,
+        description="Failed to schedule delivery.",
+    )
+    UPDATE_DELIVERY_STATUS_ERROR = ErrorCode(
+        value="UPDATE_DELIVERY_STATUS_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to update delivery status.",
+    )
+    DELIVERY_NOT_FOUND_ERROR = ErrorCode(
+        value="DELIVERY_NOT_FOUND_ERROR",
+        category=ErrorCategories.UNKNOWN_ERROR,
+        status_code=404,
+        description="Delivery not found.",
+    )
+    DRIVER_NOT_AVAILABLE_ERROR = ErrorCode(
+        value="DRIVER_NOT_AVAILABLE_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Driver is not available or not found.",
+    )
+    
+    # Order Errors
+    ORDER_NOT_FOUND_ERROR = ErrorCode(
+        value="ORDER_NOT_FOUND_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Order not found.",
+    )
+    CHANGE_ORDER_STATUS_ERROR = ErrorCode(
+        value="CHANGE_ORDER_STATUS_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to change order status.",
+    )
+    PROCESS_PAYMENT_ERROR = ErrorCode(
+        value="PROCESS_PAYMENT_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=400,
+        description="Failed to process payment confirmation.",
+    )
+    CREATE_ORDER_ERROR = ErrorCode(
+        value="CREATE_ORDER_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=500,
+        description="Failed to create order.",
+    )
+    UPDATE_ORDER_ERROR = ErrorCode(
+        value="UPDATE_ORDER_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=500,
+        description="Failed to update order.",
+    )
+    CONFIRM_ORDER_ERROR = ErrorCode(
+        value="CONFIRM_ORDER_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=500,
+        description="Failed to confirm order.",
+    )
+    REJECT_ORDER_ERROR = ErrorCode(
+        value="REJECT_ORDER_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=500,
+        description="Failed to reject order.",
+    )
+    
+    # Menu Item Errors
+    MENU_ITEM_NOT_FOUND_ERROR = ErrorCode(
+        value="MENU_ITEM_NOT_FOUND_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=404,
+        description="Menu item not found.",
+    )
+    UPDATE_MENU_ITEM_AVAILABILITY_ERROR = ErrorCode(
+        value="UPDATE_MENU_ITEM_AVAILABILITY_ERROR",
+        category=ErrorCategories.BUSINESS_LOGIC_ERROR,
+        status_code=500,
+        description="Failed to update menu item availability.",
+    )
 
     @classmethod
     def get_error_code(cls, error_code: str) -> ErrorCode:

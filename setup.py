@@ -8,7 +8,7 @@ setup(
     author_email="alirezaheidari.cs@gmail.com",
     packages=find_packages(),
     include_package_data=True,
-    url="https://github.com/alirezaheidari-cs/ftgo-utils",
+    url="https://github.com/deepmancer/ftgo-utils",
     install_requires=[
         "argon2-cffi",
         "bcrypt",
@@ -44,7 +44,7 @@ setup(
     ],
     python_requires=">=3.6",
     project_urls={
-        "Source": "https://github.com/alirezaheidari-cs/ftgo-utils",
-        "Tracker": "https://github.com/alirezaheidari-cs/ftgo-utils/issues",
+        "Source": "https://github.com/deepmancer/ftgo-utils",
+        "Tracker": "https://github.com/deepmancer/ftgo-utils/issues",
     },
 )

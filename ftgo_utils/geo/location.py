@@ -1,7 +1,8 @@
-import h3
 from typing import List, Dict, Optional, Tuple, Any
 
-from ..constants import ProvinceBoundaries, Provinces
+import h3
+
+from ..constants import ProvinceBoundaries
 
 
 def calculate_centroid(boundaries: Dict[str, Any]) -> Tuple[float, float]:

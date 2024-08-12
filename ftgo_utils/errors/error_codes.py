@@ -1,6 +1,3 @@
-import json
-from typing import Optional, Union
-
 from .data_structures import ErrorCategory, ErrorCode
 
 class ErrorCategories:

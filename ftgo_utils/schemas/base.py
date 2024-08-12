@@ -1,5 +1,4 @@
 import pydantic
-from typing import Optional
 
 
 class BaseModel(pydantic.BaseModel):    

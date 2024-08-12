@@ -5,6 +5,7 @@ from typing import Optional, Dict, Any, List
 import jwt as jwt_original_lib
 import pytz
 
+
 def encode(payload: Dict[str, Any], secret: str, algorithm: str, expiration: Optional[int] = None, **kwargs) -> str:
     _payload = copy.deepcopy(payload)
     if expiration:

@@ -1,5 +1,5 @@
 from typing import Optional
-import json
+
 
 class ValidationError(Exception):
     def __init__(self, message: str, details: Optional[str] = None):

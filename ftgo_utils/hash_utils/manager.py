@@ -1,4 +1,4 @@
-from typing import Optional, Protocol, Tuple, Union
+from typing import Tuple, Union
 
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher

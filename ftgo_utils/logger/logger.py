@@ -2,7 +2,9 @@ import json
 import logging
 import sys
 from typing import Union
+
 from loguru import logger
+
 
 class InterceptHandler(logging.Handler):
     def emit(self, record: logging.LogRecord):

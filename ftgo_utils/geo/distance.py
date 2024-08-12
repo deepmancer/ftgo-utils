@@ -1,5 +1,5 @@
 from math import radians, cos, sin, asin, sqrt
-from typing import Union, Tuple, Optional
+from typing import Union, Tuple
 
 from geojson import Point
 

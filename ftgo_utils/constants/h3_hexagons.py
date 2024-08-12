@@ -3,6 +3,7 @@ from typing import Optional
 
 from .dimension import SIUnits
 
+
 class BaseLengthConfig:
     _resolution_mapping = {}
 

@@ -1,9 +1,11 @@
 from typing import Optional
-from pydantic import BaseModel, Field, ValidationError, field_validator, EmailStr
 
+from pydantic import Field, ValidationError, field_validator, EmailStr
+
+from .base import BaseModel as BaseSchema
 from ..enums import Roles, Gender
 from ..validation import validate_phone_number, validate_enum_value
-from .base import BaseModel as BaseSchema
+
 
 def uuid_field() -> Field:
     return Field(..., min_length=1, max_length=128)

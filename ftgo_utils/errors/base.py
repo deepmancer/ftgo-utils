@@ -5,6 +5,7 @@ from typing import Any, Dict, Optional, Union
 
 from .data_structures import ErrorCode
 
+
 class BaseError(Exception):
     def __init__(
         self,

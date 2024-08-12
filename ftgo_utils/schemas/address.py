@@ -1,8 +1,9 @@
 from typing import Optional
+
 from pydantic import Field
 
-from .base import BaseModel as BaseSchema
 from .fields import LocationPointMixin, uuid_field
+
 
 class AddressInfoMixin(LocationPointMixin):
     address_line_1: str = Field(..., min_length=1, max_length=100)

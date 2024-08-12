@@ -1,9 +1,12 @@
-from enum import Enum
 import string
+from enum import Enum
+
 import validators
+
 from .exceptions import (
-    PasswordValidationError, InvalidEmailFormatError, PhoneNumberFormatError
+        PasswordValidationError, InvalidEmailFormatError, PhoneNumberFormatError
 )
+
 
 def validate_email(email: str):
     if not email:

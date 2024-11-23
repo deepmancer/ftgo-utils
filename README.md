@@ -47,6 +47,4 @@ This project is licensed under the **MIT License**, which means you’re free to
 
 ---
 
-### 🌟 Support Us
-
 If you find this project helpful, consider giving it a ⭐ on GitHub!
